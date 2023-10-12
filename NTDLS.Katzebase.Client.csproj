@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Company>NetworkDLS</Company>
     <Copyright>Copyright © 2023 NetworkDLS</Copyright>
-    <AssemblyVersion>1.0.10</AssemblyVersion>
-    <FileVersion>1.0.10</FileVersion>
-    <VersionPrefix>1.0.10</VersionPrefix>
+    <AssemblyVersion>1.1.0</AssemblyVersion>
+    <FileVersion>1.1.0</FileVersion>
+    <VersionPrefix>1.1.0</VersionPrefix>
     <Authors>NetworkDLS</Authors>
     <ApplicationIcon>NTDLS.Katzebase.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -21,7 +21,9 @@
     <RepositoryUrl>https://github.com/NTDLS/NTDLS.Katzebase.Client</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>database;nosql;rdbms;webapi;unstructured-data</PackageTags>
-    <PackageReleaseNotes>Repository relocation.</PackageReleaseNotes>
+    <PackageReleaseNotes>
+      Added net 6, 7 and documentation
+    </PackageReleaseNotes>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
 
@@ -38,11 +40,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Logo.png">
+    <None Include="Logo.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Update="NugetReadme.md">
+    <None Include="NugetReadme.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
