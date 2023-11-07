@@ -1,4 +1,7 @@
 # Katzebase Client
+
+📦 Be sure to check out the NuGet pacakge: https://www.nuget.org/packages/NTDLS.Katzebase.Client
+
 Client for the [Katzebase Database Server](https://github.com/NTDLS/NTDLS.Katzebase.Server).
 
 ![Katzebase](https://github.com/NTDLS/Katzebase/assets/11428567/99a11cfb-bbd7-468a-b9d6-7f5fe772aacd)
