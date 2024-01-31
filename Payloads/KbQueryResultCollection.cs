@@ -10,7 +10,7 @@
         //public new int RowCount => Collection.Sum(o => o.RowCount);
         public new double Duration => Collection.Sum(o => o.Duration);
 
-        public List<KbQueryResult> Collection { get; set; } = new();
+        public List<KbQueryDocumentListResult> Collection { get; set; } = new();
 
         private bool _success = true;
         public new bool Success
@@ -25,9 +25,9 @@
             }
         }
 
-        public KbQueryResult AddNew()
+        public KbQueryDocumentListResult AddNew()
         {
-            var result = new KbQueryResult();
+            var result = new KbQueryDocumentListResult();
             Collection.Add(result);
             return result;
         }
@@ -37,14 +37,14 @@
             Collection.AddRange(result.Collection);
         }
 
-        public void Add(KbQueryResult result)
+        public void Add(KbQueryDocumentListResult result)
         {
             Collection.Add(result);
         }
 
-        public static KbQueryResult FromActionResponse(KbActionResponse actionResponse)
+        public static KbQueryDocumentListResult FromActionResponse(KbActionResponse actionResponse)
         {
-            return new KbQueryResult()
+            return new KbQueryDocumentListResult()
             {
                 RowCount = actionResponse.RowCount,
                 Success = actionResponse.Success,

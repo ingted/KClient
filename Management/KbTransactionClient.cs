@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json;
-using NTDLS.Katzebase.Client.Exceptions;
-using NTDLS.Katzebase.Client.Payloads;
+﻿using NTDLS.Katzebase.Client.Exceptions;
+using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
 {
@@ -15,41 +14,47 @@ namespace NTDLS.Katzebase.Client.Management
 
         public void Begin()
         {
-            string url = $"api/Transaction/{_client.SessionId}/Begin";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
+            _client.Connection.Query<KbQueryTransactionBeginReply>(
+                new KbQueryTransactionBegin(_client.ServerConnectionId)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                });
         }
 
         public void Commit()
         {
-            string url = $"api/Transaction/{_client.SessionId}/Commit";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
+            _client.Connection.Query<KbQueryTransactionCommitReply>(
+                new KbQueryTransactionCommit(_client.ServerConnectionId)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                });
         }
 
         public void Rollback()
         {
-            string url = $"api/Transaction/{_client.SessionId}/Rollback";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
+            _client.Connection.Query<KbQueryTransactionRollbackReply>(
+                new KbQueryTransactionRollback(_client.ServerConnectionId)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                });
         }
 
     }

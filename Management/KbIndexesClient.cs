@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
-using NTDLS.Katzebase.Client.Exceptions;
+﻿using NTDLS.Katzebase.Client.Exceptions;
 using NTDLS.Katzebase.Client.Payloads;
-using System.Text;
+using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
 {
@@ -18,137 +17,121 @@ namespace NTDLS.Katzebase.Client.Management
         /// Creates an index on the given schema.
         /// </summary>
         /// <param name="schema"></param>
-        /// <param name="document"></param>
+        /// <param name="index"></param>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="KbAPIResponseException"></exception>
         public void Create(string schema, KbIndex index)
         {
-            string url = $"api/Indexes/{_client.SessionId}/{schema}/Create";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            var postContent = new StringContent(JsonConvert.SerializeObject(index), Encoding.UTF8, "text/plain");
-
-            using var response = _client.Connection.PostAsync(url, postContent);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-        }
-
-        /// <summary>
-        /// Creates a unique index on the given schema.
-        /// </summary>
-        /// <param name="schema"></param>
-        /// <param name="document"></param>
-        public void Create(string schema, KbUniqueKey index)
-        {
-            string url = $"api/Indexes/{_client.SessionId}/{schema}/Create";
-
-            var postContent = new StringContent(JsonConvert.SerializeObject(index), Encoding.UTF8, "text/plain");
-
-            using var response = _client.Connection.PostAsync(url, postContent);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
+            _client.Connection.Query<KbQueryIndexCreateReply>(
+                new KbQueryIndexCreate(_client.ServerConnectionId, schema, index)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                });
         }
 
         /// <summary>
         /// Checks for the existence of an index.
         /// </summary>
         /// <param name="schema"></param>
-        /// <param name="document"></param>
+        /// <param name="indexName"></param>
         public bool Exists(string schema, string indexName)
         {
-            string url = $"api/Indexes/{_client.SessionId}/{schema}/{indexName}/Exists";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponseBoolean>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-
-            return result.Value;
+            return _client.Connection.Query<KbQueryIndexExistsReply>(
+                new KbQueryIndexExists(_client.ServerConnectionId, schema, indexName)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result.Value;
         }
 
         /// <summary>
         /// Gets an index from a specific schema.
         /// </summary>
         /// <param name="schema"></param>
-        /// <param name="document"></param>
+        /// <param name="indexName"></param>
         public KbActionResponseIndex Get(string schema, string indexName)
         {
-            string url = $"api/Indexes/{_client.SessionId}/{schema}/{indexName}/Get";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponseIndex>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-
-            return result;
+            return _client.Connection.Query<KbQueryIndexGetReply>(
+                new KbQueryIndexGet(_client.ServerConnectionId, schema, indexName)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
 
         /// <summary>
         /// Rebuilds a given index.
         /// </summary>
-        public bool Rebuild(string schema, string indexName, int newPartitionCount = 0)
+        /// <param name="schema"></param>
+        /// <param name="indexName"></param>
+        /// <param name="newPartitionCount"></param>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="KbAPIResponseException"></exception>
+        public void Rebuild(string schema, string indexName, uint newPartitionCount = 0)
         {
-            string url = $"api/Indexes/{_client.SessionId}/{schema}/{indexName}/{newPartitionCount}/Rebuild";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponseBoolean>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-
-            return result.Value;
+            _client.Connection.Query<KbQueryIndexRebuildReply>(
+                new KbQueryIndexRebuild(_client.ServerConnectionId, schema, indexName, newPartitionCount)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                });
         }
 
         /// <summary>
         /// Deletes a given index.
         /// </summary>
         /// <param name="schema"></param>
-        /// <param name="document"></param>
-        public bool Drop(string schema, string indexName)
+        /// <param name="indexName"></param>
+        public void Drop(string schema, string indexName)
         {
-            string url = $"api/Indexes/{_client.SessionId}/{schema}/{indexName}/Drop";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponseBoolean>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-
-            return result.Value;
+            _client.Connection.Query<KbQueryIndexDropReply>(
+                new KbQueryIndexDrop(_client.ServerConnectionId, schema, indexName)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                });
         }
 
         /// <summary>
         /// Lists all indexes on a given schema
         /// </summary>
         /// <param name="schema"></param>
-        /// <param name="document"></param>
         public KbActionResponseIndexes List(string schema)
         {
-            string url = $"api/Indexes/{_client.SessionId}/{schema}/List";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponseIndexes>(resultText) ?? new KbActionResponseIndexes();
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
+            return _client.Connection.Query<KbQueryIndexListReply>(
+                new KbQueryIndexList(_client.ServerConnectionId, schema)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
     }
 }

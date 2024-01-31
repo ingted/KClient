@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
-using NTDLS.Katzebase.Client.Exceptions;
+﻿using NTDLS.Katzebase.Client.Exceptions;
 using NTDLS.Katzebase.Client.Payloads;
-using System.Text;
+using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
 {
@@ -16,66 +15,62 @@ namespace NTDLS.Katzebase.Client.Management
 
         public KbQueryResultCollection ExplainQuery(string statement)
         {
-            string url = $"api/Query/{_client.SessionId}/ExplainQuery";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            var postContent = new StringContent(JsonConvert.SerializeObject(statement), Encoding.UTF8);
-
-            using var response = _client.Connection.PostAsync(url, postContent);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbQueryResultCollection>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
+            return _client.Connection.Query<KbQueryQueryExplainReply>(
+                new KbQueryQueryExplain(_client.ServerConnectionId, statement)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
 
         public KbQueryResultCollection ExecuteQuery(string statement)
         {
-            string url = $"api/Query/{_client.SessionId}/ExecuteQuery";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            var postContent = new StringContent(JsonConvert.SerializeObject(statement), Encoding.UTF8);
-
-            using var response = _client.Connection.PostAsync(url, postContent);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbQueryResultCollection>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
+            return _client.Connection.Query<KbQueryQueryExecuteQueryReply>(
+                new KbQueryQueryExecuteQuery(_client.ServerConnectionId, statement)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
 
         public KbQueryResultCollection ExecuteQueries(List<string> statements)
         {
-            string url = $"api/Query/{_client.SessionId}/ExecuteQueries";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            var postContent = new StringContent(JsonConvert.SerializeObject(statements), Encoding.UTF8);
-
-            using var response = _client.Connection.PostAsync(url, postContent);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbQueryResultCollection>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
+            return _client.Connection.Query<KbQueryQueryExecuteQueriesReply>(
+                new KbQueryQueryExecuteQueries(_client.ServerConnectionId, statements)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
 
         public KbActionResponseCollection ExecuteNonQuery(string statement)
         {
-            string url = $"api/Query/{_client.SessionId}/ExecuteNonQuery";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            var postContent = new StringContent(JsonConvert.SerializeObject(statement), Encoding.UTF8);
-
-            using var response = _client.Connection.PostAsync(url, postContent);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponseCollection>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
+            return _client.Connection.Query<KbQueryQueryExecuteNonQueryReply>(
+                new KbQueryQueryExecuteNonQuery(_client.ServerConnectionId, statement)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
     }
 }

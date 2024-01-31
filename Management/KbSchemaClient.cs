@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using NTDLS.Katzebase.Client.Exceptions;
+﻿using NTDLS.Katzebase.Client.Exceptions;
 using NTDLS.Katzebase.Client.Payloads;
+using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
 {
@@ -20,24 +20,26 @@ namespace NTDLS.Katzebase.Client.Management
         /// Creates a single schema.
         /// </summary>
         /// <param name="schema"></param>
-        public void Create(string schema, int pageSize = 0)
+        public void Create(string schema, uint pageSize = 0)
         {
-            string url = $"api/Schema/{_client.SessionId}/{schema}/{pageSize}/Create";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
+            _client.Connection.Query<KbQuerySchemaCreateReply>(
+                new KbQuerySchemaCreate(_client.ServerConnectionId, schema, pageSize)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                });
         }
 
         /// <summary>
-        /// Creates a full schema path
+        /// Creates a full schema path.
         /// </summary>
         /// <param name="schema"></param>
-        public void CreateFullSchema(string schema, int pageSize = 0)
+        public void CreateRecursive(string schema, uint pageSize = 0)
         {
             string fullSchema = string.Empty;
 
@@ -58,17 +60,17 @@ namespace NTDLS.Katzebase.Client.Management
         /// <param name="schema"></param>
         public bool Exists(string schema)
         {
-            string url = $"api/Schema/{_client.SessionId}/{schema}/Exists";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponseBoolean>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-
-            return result.Value;
+            return _client.Connection.Query<KbQuerySchemaExistsReply>(
+                new KbQuerySchemaExists(_client.ServerConnectionId, schema)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result.Value;
         }
 
         /// <summary>
@@ -77,15 +79,17 @@ namespace NTDLS.Katzebase.Client.Management
         /// <param name="schema"></param>
         public void Drop(string schema)
         {
-            string url = $"api/Schema/{_client.SessionId}/{schema}/Drop";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
+            _client.Connection.Query<KbQuerySchemaDropReply>(
+                new KbQuerySchemaExists(_client.ServerConnectionId, schema)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                });
         }
 
         /// <summary>
@@ -106,18 +110,19 @@ namespace NTDLS.Katzebase.Client.Management
         /// Lists the existing schemas within a given schema.
         /// </summary>
         /// <param name="schema"></param>
-        public KbActionResponseSchemaCollection List(string schema)
+        public KbQuerySchemaListReply List(string schema)
         {
-            string url = $"api/Schema/{_client.SessionId}/{schema}/List";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponseSchemaCollection>(resultText) ?? new KbActionResponseSchemaCollection();
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
+            return _client.Connection.Query<KbQuerySchemaListReply>(
+                new KbQuerySchemaList(_client.ServerConnectionId, schema)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
 
         /// <summary>
@@ -126,16 +131,17 @@ namespace NTDLS.Katzebase.Client.Management
         /// <param name="schema"></param>
         public KbActionResponseSchemaCollection List()
         {
-            string url = $"api/Schema/{_client.SessionId}/:/List";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponseSchemaCollection>(resultText) ?? new KbActionResponseSchemaCollection();
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
+            return _client.Connection.Query<KbQuerySchemaListReply>(
+                new KbQuerySchemaList(_client.ServerConnectionId, ":")).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
     }
 }

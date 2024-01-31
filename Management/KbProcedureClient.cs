@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
-using NTDLS.Katzebase.Client.Exceptions;
+﻿using NTDLS.Katzebase.Client.Exceptions;
 using NTDLS.Katzebase.Client.Payloads;
-using System.Text;
+using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
 {
@@ -23,20 +22,19 @@ namespace NTDLS.Katzebase.Client.Management
         /// <param name="procedure"></param>
         /// <returns></returns>
         /// <exception cref="KbAPIResponseException"></exception>
-        public KbQueryResult Execute(KbProcedure procedure)
+        public KbQueryProcedureExecuteReply Execute(KbProcedure procedure)
         {
-            string url = $"api/Procedure/{_client.SessionId}/ExecuteProcedure";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            var postContent = new StringContent(JsonConvert.SerializeObject(procedure), Encoding.UTF8);
-
-            using var response = _client.Connection.PostAsync(url, postContent);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbQueryResult>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
+            return _client.Connection.Query<KbQueryProcedureExecuteReply>(
+                new KbQueryProcedureExecute(_client.ServerConnectionId, procedure)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
     }
 }

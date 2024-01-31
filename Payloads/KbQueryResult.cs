@@ -3,7 +3,7 @@
     /// <summary>
     /// KbQueryResult is used to return a field-set and the associated row values.
     /// </summary>
-    public class KbQueryResult : KbBaseActionResponse
+    public class KbQueryDocumentListResult : KbBaseActionResponse
     {
         public List<KbQueryField> Fields { get; set; } = new();
         public List<KbQueryRow> Rows { get; set; } = new();
@@ -18,9 +18,9 @@
             Rows.Add(new KbQueryRow(values));
         }
 
-        public static KbQueryResult FromActionResponse(KbBaseActionResponse actionResponse)
+        public static KbQueryDocumentListResult FromActionResponse(KbBaseActionResponse actionResponse)
         {
-            return new KbQueryResult()
+            return new KbQueryDocumentListResult()
             {
                 Messages = actionResponse.Messages,
                 RowCount = actionResponse.RowCount,

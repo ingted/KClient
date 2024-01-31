@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json;
-using NTDLS.Katzebase.Client.Exceptions;
-using NTDLS.Katzebase.Client.Payloads;
+﻿using NTDLS.Katzebase.Client.Exceptions;
+using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
 {
@@ -14,30 +13,23 @@ namespace NTDLS.Katzebase.Client.Management
         }
 
         /// <summary>
-        /// Tests the connection to the server.
+        /// Starts a session on the server
         /// </summary>
         /// <returns></returns>
         /// <exception cref="KbAPIResponseException"></exception>
-        public KbActionResponsePing Ping()
+        public KbQueryServerStartSessionReply StartSession()
         {
-            string url = $"api/Server/{_client.SessionId}/Ping";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            if (string.IsNullOrWhiteSpace(_client.ClientName) == false)
-            {
-                url = $"api/Server/{_client.SessionId}/Ping/{_client.ClientName}";
-            }
-
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponsePing>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-
-            _client.ServerProcessId = result.ProcessId;
-
-            return result;
+            return _client.Connection.Query<KbQueryServerStartSessionReply>(
+                new KbQueryServerStartSession(_client.ServerConnectionId)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
 
         /// <summary>
@@ -45,19 +37,19 @@ namespace NTDLS.Katzebase.Client.Management
         /// </summary>
         /// <returns></returns>
         /// <exception cref="KbAPIResponseException"></exception>
-        public KbActionResponse CloseSession()
+        public void CloseSession()
         {
-            string url = $"api/Server/{_client.SessionId}/CloseSession";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-
-            return result;
+            _client.Connection.Query<KbQueryServerCloseSessionReply>(
+                new KbQueryServerCloseSession(_client.ServerConnectionId)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                });
         }
 
         /// <summary>
@@ -65,19 +57,19 @@ namespace NTDLS.Katzebase.Client.Management
         /// </summary>
         /// <returns></returns>
         /// <exception cref="KbAPIResponseException"></exception>
-        public KbActionResponse TerminateProcess(ulong processId)
+        public void TerminateProcess(ulong processId)
         {
-            string url = $"api/Server/{_client.SessionId}/TerminateProcess/{processId}";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-
-            return result;
+            _client.Connection.Query<KbQueryServerTerminateProcessReply>(
+                new KbQueryServerTerminateProcess(_client.ServerConnectionId, processId)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                });
         }
     }
 }

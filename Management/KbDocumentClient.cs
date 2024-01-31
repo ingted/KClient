@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
-using NTDLS.Katzebase.Client.Exceptions;
+﻿using NTDLS.Katzebase.Client.Exceptions;
 using NTDLS.Katzebase.Client.Payloads;
-using System.Text;
+using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
 {
@@ -21,17 +20,16 @@ namespace NTDLS.Katzebase.Client.Management
         /// <param name="document"></param>
         public void Store(string schema, KbDocument document)
         {
-            string url = $"api/Document/{_client.SessionId}/{schema}/Store";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            var postContent = new StringContent(JsonConvert.SerializeObject(document), Encoding.UTF8, "text/plain");
-
-            using var response = _client.Connection.PostAsync(url, postContent);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
+            _client.Connection.Query<KbQueryDocumentStoreReply>(
+                new KbQueryDocumentStore(_client.ServerConnectionId, schema, document)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                });
         }
 
         /// <summary>
@@ -41,91 +39,93 @@ namespace NTDLS.Katzebase.Client.Management
         /// <param name="document"></param>
         public void Store(string schema, object document)
         {
-            string url = $"api/Document/{_client.SessionId}/{schema}/Store";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            var postContent = new StringContent(JsonConvert.SerializeObject(new KbDocument(document)), Encoding.UTF8, "text/plain");
-
-            using var response = _client.Connection.PostAsync(url, postContent);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
+            _client.Connection.Query<KbQueryDocumentStoreReply>(
+                new KbQueryDocumentStore(_client.ServerConnectionId, schema, new KbDocument(document))).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                });
         }
 
         /// <summary>
         /// Deletes a document in the given schema by its Id.
         /// </summary>
         /// <param name="schema"></param>
-        /// <param name="document"></param>
+        /// <param name="id"></param>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="KbAPIResponseException"></exception>
         public void DeleteById(string schema, uint id)
         {
-            string url = $"api/Document/{_client.SessionId}/{schema}/{id}/DeleteById";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
+            _client.Connection.Query<KbQueryDocumentDeleteByIdReply>(
+                new KbQueryDocumentDeleteById(_client.ServerConnectionId, schema, id)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                });
         }
 
         /// <summary>
         /// Lists the documents within a given schema.
         /// </summary>
-        /// <param name="schema"></param>
-        public KbDocumentCatalogCollection Catalog(string schema)
+        public KbQueryDocumentCatalogReply Catalog(string schema)
         {
-            string url = $"api/Document/{_client.SessionId}/{schema}/Catalog";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbDocumentCatalogCollection>(resultText) ?? new KbDocumentCatalogCollection();
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
-
+            return _client.Connection.Query<KbQueryDocumentCatalogReply>(
+                new KbQueryDocumentCatalog(_client.ServerConnectionId, schema)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
 
         /// <summary>
         /// Lists the documents within a given schema with their values.
         /// </summary>
         /// <param name="schema"></param>
-        public KbQueryResult List(string schema, int count = -1)
+        public KbQueryDocumentListReply List(string schema, int count = -1)
         {
-            string url = $"api/Document/{_client.SessionId}/{schema}/List/{count}";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbQueryResult>(resultText) ?? new KbQueryResult();
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
-
+            return _client.Connection.Query<KbQueryDocumentListReply>(
+                new KbQueryDocumentList(_client.ServerConnectionId, schema, count)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
 
         /// <summary>
         /// Samples the documents within a given schema with their values.
         /// </summary>
         /// <param name="schema"></param>
-        public KbQueryResult Sample(string schema, int count)
+        public KbQueryDocumentSampleReply Sample(string schema, int count)
         {
-            string url = $"api/Document/{_client.SessionId}/{schema}/Sample/{count}";
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            using var response = _client.Connection.GetAsync(url);
-            string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<KbQueryResult>(resultText) ?? new KbQueryResult();
-            if (result == null || result.Success == false)
-            {
-                throw new KbAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
-            return result;
+            return _client.Connection.Query<KbQueryDocumentSampleReply>(
+                new KbQueryDocumentSample(_client.ServerConnectionId, schema, count)).ContinueWith(t =>
+                {
+                    if (t.Result?.Success != true)
+                    {
+                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                    }
+                    return t.Result;
+                }).Result;
         }
     }
 }
