@@ -99,7 +99,9 @@ namespace NTDLS.Katzebase.Client
 
                     OnDisconnected?.Invoke(this, sessionInfo);
 
-                    Disconnect();
+                    Connection = null;
+                    ServerConnectionId = Guid.Empty;
+                    ProcessId = 0;
                 };
 
                 Connection.Connect(hostname, port);
