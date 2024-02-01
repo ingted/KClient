@@ -22,7 +22,7 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query<KbQueryServerStartSessionReply>(
-                new KbQueryServerStartSession(_client.ServerConnectionId)).ContinueWith(t =>
+                new KbQueryServerStartSession()).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
                     {

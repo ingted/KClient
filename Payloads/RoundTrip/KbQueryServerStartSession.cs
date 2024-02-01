@@ -4,11 +4,8 @@ namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
 {
     public class KbQueryServerStartSession : IFramePayloadQuery
     {
-        public Guid ConnectionId { get; set; }
-
-        public KbQueryServerStartSession(Guid connectionId)
+        public KbQueryServerStartSession()
         {
-            ConnectionId = connectionId;
         }
     }
 
