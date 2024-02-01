@@ -1,20 +1,31 @@
 ﻿using NTDLS.Katzebase.Client.Exceptions;
 using NTDLS.Katzebase.Client.Management;
+using NTDLS.Katzebase.Client.Payloads;
 using NTDLS.ReliableMessaging;
+using NTDLS.StreamFraming.Payloads;
 using System.Diagnostics;
 
 namespace NTDLS.Katzebase.Client
 {
     public class KbClient : IDisposable
     {
+        public delegate void ConnectedEvent(KbClient sender, KbSessionInfo sessionInfo);
+        public event ConnectedEvent? OnConnected;
+
+        public delegate void DisconnectedEvent(KbClient sender, KbSessionInfo sessionInfo);
+        public event DisconnectedEvent? OnDisconnected;
+
+        public delegate void CommunicationExeptionEvent(KbClient sender, KbSessionInfo sessionInfo, Exception ex);
+        public event CommunicationExeptionEvent? OnCommunicationExeption;
+
         internal MessageClient? Connection { get; private set; }
 
         public string Host { get; set; } = string.Empty;
         public int Port { get; set; }
-
         public string ClientName { get; private set; }
         public ulong ProcessId { get; set; }
         public Guid ServerConnectionId { get; private set; }
+
         public KbDocumentClient Document { get; private set; }
         public KbSchemaClient Schema { get; private set; }
         public KbServerClient Server { get; private set; }
@@ -67,12 +78,40 @@ namespace NTDLS.Katzebase.Client
             try
             {
                 Connection = new MessageClient();
-                Connection.Connect(hostname, port);
-                Connection.OnException += Connection_OnException;
+                Connection.OnException += (MessageClient client, Guid connectionId, Exception ex, IFramePayload? payload) =>
+                {
+                    var sessionInfo = new KbSessionInfo
+                    {
+                        ConnectionId = ServerConnectionId,
+                        ProcessId = ProcessId
+                    };
 
-                var sessionInfo = Server.StartSession();
-                ServerConnectionId = sessionInfo.ConnectionId;
-                ProcessId = sessionInfo.ProcessId;
+                    OnCommunicationExeption?.Invoke(this, sessionInfo, ex);
+                };
+
+                Connection.OnDisconnected += (MessageClient client, Guid connectionId) =>
+                {
+                    var sessionInfo = new KbSessionInfo
+                    {
+                        ConnectionId = ServerConnectionId,
+                        ProcessId = ProcessId
+                    };
+
+                    OnDisconnected?.Invoke(this, sessionInfo);
+                };
+
+                Connection.Connect(hostname, port);
+
+                var reply = Server.StartSession();
+                ServerConnectionId = reply.ConnectionId;
+                ProcessId = reply.ProcessId;
+
+                var sessionInfo = new KbSessionInfo
+                {
+                    ConnectionId = ServerConnectionId,
+                    ProcessId = ProcessId
+                };
+                OnConnected?.Invoke(this, sessionInfo);
             }
             catch
             {
@@ -80,11 +119,6 @@ namespace NTDLS.Katzebase.Client
                 ServerConnectionId = Guid.Empty;
                 throw;
             }
-        }
-
-        private bool Connection_OnException(MessageClient client, Guid connectionId, Exception ex, StreamFraming.Payloads.IFramePayload? payload)
-        {
-            throw new NotImplementedException();
         }
 
         void Disconnect()
