@@ -6,12 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Company>NetworkDLS</Company>
-    <Copyright>Copyright © 2023 NetworkDLS</Copyright>
-    <AssemblyVersion>1.1.1</AssemblyVersion>
-    <FileVersion>1.2.0</FileVersion>
-    <VersionPrefix>1.2.0</VersionPrefix>
+    <Copyright>Copyright © 2024 NetworkDLS</Copyright>
+    <AssemblyVersion>1.2.1</AssemblyVersion>
+    <FileVersion>1.2.1</FileVersion>
+    <VersionPrefix>1.2.1</VersionPrefix>
     <Authors>NetworkDLS</Authors>
-    <ApplicationIcon>NTDLS.Katzebase.ico</ApplicationIcon>
+    <ApplicationIcon>@Art\IconFull.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="NTDLS.Katzebase.ico" />
+    <Content Include="@Art\IconFull.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +52,13 @@
       <PackagePath>\</PackagePath>
     </None>
     <None Include="NugetReadme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="%40Art\Logo.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
