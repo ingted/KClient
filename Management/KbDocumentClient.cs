@@ -22,7 +22,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            _client.Connection.Query<KbQueryDocumentStoreReply>(
+            _client.Connection.Query(
                 new KbQueryDocumentStore(_client.ServerConnectionId, schema, document)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -41,7 +41,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            _client.Connection.Query<KbQueryDocumentStoreReply>(
+            _client.Connection.Query(
                 new KbQueryDocumentStore(_client.ServerConnectionId, schema, new KbDocument(document))).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -62,7 +62,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            _client.Connection.Query<KbQueryDocumentDeleteByIdReply>(
+            _client.Connection.Query(
                 new KbQueryDocumentDeleteById(_client.ServerConnectionId, schema, id)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -79,7 +79,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQueryDocumentCatalogReply>(
+            return _client.Connection.Query(
                 new KbQueryDocumentCatalog(_client.ServerConnectionId, schema)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -98,7 +98,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQueryDocumentListReply>(
+            return _client.Connection.Query(
                 new KbQueryDocumentList(_client.ServerConnectionId, schema, count)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -117,7 +117,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQueryDocumentSampleReply>(
+            return _client.Connection.Query(
                 new KbQueryDocumentSample(_client.ServerConnectionId, schema, count)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)

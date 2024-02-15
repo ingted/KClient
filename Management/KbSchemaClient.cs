@@ -24,7 +24,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            _client.Connection.Query<KbQuerySchemaCreateReply>(
+            _client.Connection.Query(
                 new KbQuerySchemaCreate(_client.ServerConnectionId, schema, pageSize)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -62,7 +62,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQuerySchemaExistsReply>(
+            return _client.Connection.Query(
                 new KbQuerySchemaExists(_client.ServerConnectionId, schema)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -81,8 +81,8 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            _client.Connection.Query<KbQuerySchemaDropReply>(
-                new KbQuerySchemaExists(_client.ServerConnectionId, schema)).ContinueWith(t =>
+            _client.Connection.Query(
+                new KbQuerySchemaDrop(_client.ServerConnectionId, schema)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
                     {
@@ -114,7 +114,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQuerySchemaListReply>(
+            return _client.Connection.Query(
                 new KbQuerySchemaList(_client.ServerConnectionId, schema)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -133,7 +133,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQuerySchemaListReply>(
+            return _client.Connection.Query(
                 new KbQuerySchemaList(_client.ServerConnectionId, ":")).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)

@@ -1,15 +1,15 @@
-﻿using NTDLS.StreamFraming.Payloads;
+﻿using NTDLS.ReliableMessaging;
 
 namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
 {
-    public class KbQueryServerStartSession : IFramePayloadQuery
+    public class KbQueryServerStartSession : IRmQuery<KbQueryServerStartSessionReply>
     {
         public KbQueryServerStartSession()
         {
         }
     }
 
-    public class KbQueryServerStartSessionReply : KbBaseActionResponse, IFramePayloadQueryReply
+    public class KbQueryServerStartSessionReply : KbBaseActionResponse, IRmQueryReply
     {
         public DateTime? ServerTimeUTC { get; set; }
         public Guid ConnectionId { get; set; }

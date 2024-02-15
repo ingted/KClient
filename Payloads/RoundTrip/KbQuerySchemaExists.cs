@@ -1,8 +1,8 @@
-﻿using NTDLS.StreamFraming.Payloads;
+﻿using NTDLS.ReliableMessaging;
 
 namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
 {
-    public class KbQuerySchemaExists : IFramePayloadQuery
+    public class KbQuerySchemaExists : IRmQuery<KbQuerySchemaExistsReply>
     {
         public Guid ConnectionId { get; set; }
         public string Schema { get; set; }
@@ -14,7 +14,7 @@ namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
         }
     }
 
-    public class KbQuerySchemaExistsReply : KbActionResponseBoolean, IFramePayloadQueryReply
+    public class KbQuerySchemaExistsReply : KbActionResponseBoolean, IRmQueryReply
     {
         public KbQuerySchemaExistsReply()
         {

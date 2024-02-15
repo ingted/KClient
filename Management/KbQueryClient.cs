@@ -17,7 +17,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQueryQueryExplainReply>(
+            return _client.Connection.Query(
                 new KbQueryQueryExplain(_client.ServerConnectionId, statement)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -32,7 +32,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQueryQueryExecuteQueryReply>(
+            return _client.Connection.Query(
                 new KbQueryQueryExecuteQuery(_client.ServerConnectionId, statement)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -47,7 +47,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQueryQueryExecuteQueriesReply>(
+            return _client.Connection.Query(
                 new KbQueryQueryExecuteQueries(_client.ServerConnectionId, statements)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -62,7 +62,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQueryQueryExecuteNonQueryReply>(
+            return _client.Connection.Query(
                 new KbQueryQueryExecuteNonQuery(_client.ServerConnectionId, statement)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)

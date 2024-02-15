@@ -2,7 +2,6 @@
 using NTDLS.Katzebase.Client.Management;
 using NTDLS.Katzebase.Client.Payloads;
 using NTDLS.ReliableMessaging;
-using NTDLS.StreamFraming.Payloads;
 using System.Diagnostics;
 
 namespace NTDLS.Katzebase.Client
@@ -18,7 +17,7 @@ namespace NTDLS.Katzebase.Client
         public delegate void CommunicationExeptionEvent(KbClient sender, KbSessionInfo sessionInfo, Exception ex);
         public event CommunicationExeptionEvent? OnCommunicationExeption;
 
-        internal MessageClient? Connection { get; private set; }
+        internal RmClient? Connection { get; private set; }
 
         public string Host { get; set; } = string.Empty;
         public int Port { get; set; }
@@ -77,8 +76,8 @@ namespace NTDLS.Katzebase.Client
 
             try
             {
-                Connection = new MessageClient();
-                Connection.OnException += (MessageClient client, Guid connectionId, Exception ex, IFramePayload? payload) =>
+                Connection = new RmClient();
+                Connection.OnException += (RmContext context, Exception ex, IRmPayload? payload) =>
                 {
                     var sessionInfo = new KbSessionInfo
                     {
@@ -89,7 +88,7 @@ namespace NTDLS.Katzebase.Client
                     OnCommunicationExeption?.Invoke(this, sessionInfo, ex);
                 };
 
-                Connection.OnDisconnected += (MessageClient client, Guid connectionId) =>
+                Connection.OnDisconnected += (RmContext context) =>
                 {
                     var sessionInfo = new KbSessionInfo
                     {

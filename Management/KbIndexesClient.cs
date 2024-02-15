@@ -24,7 +24,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            _client.Connection.Query<KbQueryIndexCreateReply>(
+            _client.Connection.Query(
                 new KbQueryIndexCreate(_client.ServerConnectionId, schema, index)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -43,7 +43,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQueryIndexExistsReply>(
+            return _client.Connection.Query(
                 new KbQueryIndexExists(_client.ServerConnectionId, schema, indexName)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -63,7 +63,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQueryIndexGetReply>(
+            return _client.Connection.Query(
                 new KbQueryIndexGet(_client.ServerConnectionId, schema, indexName)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -86,7 +86,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            _client.Connection.Query<KbQueryIndexRebuildReply>(
+            _client.Connection.Query(
                 new KbQueryIndexRebuild(_client.ServerConnectionId, schema, indexName, newPartitionCount)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -105,7 +105,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            _client.Connection.Query<KbQueryIndexDropReply>(
+            _client.Connection.Query(
                 new KbQueryIndexDrop(_client.ServerConnectionId, schema, indexName)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
@@ -123,7 +123,7 @@ namespace NTDLS.Katzebase.Client.Management
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
-            return _client.Connection.Query<KbQueryIndexListReply>(
+            return _client.Connection.Query(
                 new KbQueryIndexList(_client.ServerConnectionId, schema)).ContinueWith(t =>
                 {
                     if (t.Result?.Success != true)
