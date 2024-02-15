@@ -1,5 +1,5 @@
 # Katzebase : Client Connectivity Libraries
-![Icon128](https://github.com/NTDLS/NTDLS.Katzebase.Client/assets/11428567/c96a6274-322a-4da0-9d92-12756100be45)
+![Logo128](https://github.com/NTDLS/NTDLS.Katzebase.Client/assets/11428567/0fadde10-1067-4f9c-8eaa-eb555d78019d)
 
 📦 Be sure to check out the NuGet pacakge: https://www.nuget.org/packages/NTDLS.Katzebase.Client
 
