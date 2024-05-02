@@ -7,9 +7,9 @@
     <Nullable>enable</Nullable>
     <Company>NetworkDLS</Company>
     <Copyright>Copyright © 2024 NetworkDLS</Copyright>
-    <AssemblyVersion>1.3.0</AssemblyVersion>
-    <FileVersion>1.3.0</FileVersion>
-    <VersionPrefix>1.3.0</VersionPrefix>
+    <AssemblyVersion>1.3.1</AssemblyVersion>
+    <FileVersion>1.3.1</FileVersion>
+    <VersionPrefix>1.3.1</VersionPrefix>
     <Authors>NetworkDLS</Authors>
     <ApplicationIcon>@Art\IconFull.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -28,7 +28,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>database;nosql;rdbms;webapi;unstructured-data</PackageTags>
     <PackageReleaseNotes>
-      Updated reliable messaging nuget.
+      Added thread protection to queries awaiting replies
     </PackageReleaseNotes>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
