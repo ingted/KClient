@@ -38,7 +38,7 @@
 
         public enum KbMetricType
         {
-            Descrete,
+            Discrete,
             Cumulative
         }
     }
