@@ -6,7 +6,7 @@ namespace NTDLS.Katzebase.Client.Payloads
     {
         public uint Id { get; set; }
         public DateTime Created { get; set; }
-        public DateTime Modfied { get; set; }
+        public DateTime Modified { get; set; }
         public string Content { get; set; } = string.Empty;
 
         public KbDocument()

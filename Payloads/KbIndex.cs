@@ -6,7 +6,7 @@
         public string Name { get; set; } = string.Empty;
         public Guid Id { get; set; }
         public DateTime Created { get; set; }
-        public DateTime Modfied { get; set; }
+        public DateTime Modified { get; set; }
         public virtual bool IsUnique { get; set; }
         public uint Partitions { get; set; }
 

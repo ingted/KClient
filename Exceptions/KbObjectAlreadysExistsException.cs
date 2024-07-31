@@ -2,14 +2,14 @@
 
 namespace NTDLS.Katzebase.Client.Exceptions
 {
-    public class KbObjectAlreadysExistsException : KbExceptionBase
+    public class KbObjectAlreadyExistsException : KbExceptionBase
     {
-        public KbObjectAlreadysExistsException()
+        public KbObjectAlreadyExistsException()
         {
             Severity = KbLogSeverity.Warning;
         }
 
-        public KbObjectAlreadysExistsException(string? message)
+        public KbObjectAlreadyExistsException(string? message)
             : base($"Object already exists exception: {message}.")
 
         {

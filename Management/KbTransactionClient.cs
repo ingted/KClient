@@ -56,6 +56,5 @@ namespace NTDLS.Katzebase.Client.Management
                     return t.Result;
                 });
         }
-
     }
 }

@@ -14,8 +14,8 @@ namespace NTDLS.Katzebase.Client
         public delegate void DisconnectedEvent(KbClient sender, KbSessionInfo sessionInfo);
         public event DisconnectedEvent? OnDisconnected;
 
-        public delegate void CommunicationExeptionEvent(KbClient sender, KbSessionInfo sessionInfo, Exception ex);
-        public event CommunicationExeptionEvent? OnCommunicationExeption;
+        public delegate void CommunicationExceptionEvent(KbClient sender, KbSessionInfo sessionInfo, Exception ex);
+        public event CommunicationExceptionEvent? OnCommunicationException;
 
         internal RmClient? Connection { get; private set; }
 
@@ -77,7 +77,7 @@ namespace NTDLS.Katzebase.Client
             try
             {
                 Connection = new RmClient();
-                Connection.OnException += (RmContext context, Exception ex, IRmPayload? payload) =>
+                Connection.OnException += (RmContext? context, Exception ex, IRmPayload? payload) =>
                 {
                     var sessionInfo = new KbSessionInfo
                     {
@@ -85,7 +85,7 @@ namespace NTDLS.Katzebase.Client
                         ProcessId = ProcessId
                     };
 
-                    OnCommunicationExeption?.Invoke(this, sessionInfo, ex);
+                    OnCommunicationException?.Invoke(this, sessionInfo, ex);
                 };
 
                 Connection.OnDisconnected += (RmContext context) =>

@@ -7,9 +7,7 @@
     <Nullable>enable</Nullable>
     <Company>NetworkDLS</Company>
     <Copyright>Copyright © 2024 NetworkDLS</Copyright>
-    <AssemblyVersion>1.3.3</AssemblyVersion>
-    <FileVersion>1.3.3</FileVersion>
-    <VersionPrefix>1.3.3</VersionPrefix>
+    <Version>1.3.4</Version>
     <Authors>NetworkDLS</Authors>
     <ApplicationIcon>@Art\IconFull.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -28,7 +26,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>database;nosql;rdbms;webapi;unstructured-data</PackageTags>
     <PackageReleaseNotes>
-      Updated reliable messaging nuget which now throws base exceptions.
+      Updated nugets and consolidated functionality.
     </PackageReleaseNotes>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
@@ -43,7 +41,8 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.5.1" />
+    <PackageReference Include="NTDLS.Helpers" Version="1.2.0" />
+    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.8.6" />
   </ItemGroup>
 
   <ItemGroup>
