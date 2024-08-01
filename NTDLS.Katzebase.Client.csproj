@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <Company>NetworkDLS</Company>
     <Copyright>Copyright © 2024 NetworkDLS</Copyright>
-    <Version>1.3.11</Version>
+    <Version>1.3.12</Version>
     <Authors>NetworkDLS</Authors>
     <ApplicationIcon>@Art\IconFull.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -26,7 +26,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>database;nosql;rdbms;webapi;unstructured-data</PackageTags>
     <PackageReleaseNotes>
-      Refactored log severity in api responses.
+      Nuget update to handle exception passthrough.
     </PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
@@ -42,7 +42,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NTDLS.Helpers" Version="1.2.3" />
-    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.8.6" />
+    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.8.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +54,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NTDLS.ReliableMessaging\NTDLS.ReliableMessaging\NTDLS.ReliableMessaging.csproj" />
   </ItemGroup>
 
   <ItemGroup>
