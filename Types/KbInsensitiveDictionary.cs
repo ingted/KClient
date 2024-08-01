@@ -1,13 +1,14 @@
 ﻿namespace NTDLS.Katzebase.Client.Types
 {
     /// <summary>
-    /// The katzebase Case-insensitive lookup.
+    /// The katzebase case-insensitive dictionary.
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
     [Serializable]
     public class KbInsensitiveDictionary<TValue> : Dictionary<string, TValue>
     {
-        public KbInsensitiveDictionary() : base(StringComparer.InvariantCultureIgnoreCase) { }
+        public KbInsensitiveDictionary()
+            : base(StringComparer.InvariantCultureIgnoreCase) { }
 
         public KbInsensitiveDictionary<TValue> Clone()
         {

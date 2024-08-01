@@ -6,10 +6,36 @@
 
         public enum KbLogSeverity
         {
-            Trace = 0, //Super-verbose, debug-like information.
-            Verbose = 1, //General status messages.
-            Warning = 2, //Something the user might want to be aware of.
-            Exception = 3 //An actual exception has been thrown.
+            /// <summary>
+            /// The most detailed information. These messages may contain sensitive application data.
+            /// They are typically only enabled during development.
+            /// </summary>
+            Verbose = 0,
+            /// <summary>
+            /// Diagnostic information useful for debugging.
+            /// These messages are less detailed than Verbose but still more than what's typically needed during production.
+            /// </summary>
+            Debug = 1,
+            /// <summary>
+            /// Informational messages that highlight the progress of the application at a high level.
+            /// These messages are useful for tracking the flow of the application.
+            /// </summary>
+            Information = 2,
+            /// <summary>
+            /// Potentially harmful situations that could lead to errors.
+            /// These messages indicate a potential problem that should be investigated.
+            /// </summary>
+            Warning = 3,
+            /// <summary>
+            /// Errors that prevent the current operation from continuing.
+            /// These messages indicate a failure in the current operation or request but not an application-wide failure.
+            /// </summary>
+            Error = 4,
+            /// <summary>
+            /// Very severe errors that lead to application termination.
+            /// These messages indicate critical failures that require immediate attention.
+            /// </summary>
+            Fatal = 5
         }
 
         public enum KbTransactionWarning

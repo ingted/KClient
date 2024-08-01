@@ -5,7 +5,6 @@
         public override bool IsUnique
         {
             get => true;
-            set { }
         }
 
         public KbUniqueKey(string name) : base(name) { }

@@ -14,6 +14,9 @@
         {
             Name = name;
         }
+        public KbIndex()
+        {
+        }
 
         public KbIndex(string name, string[] attributes)
         {
@@ -33,15 +36,17 @@
             }
         }
 
-        public KbIndex() { }
-
-        public void AddAttribute(string name) =>
+        public void AddAttribute(string name)
+        {
             AddAttribute(new KbIndexAttribute()
             {
                 Field = name
             });
+        }
 
-
-        public void AddAttribute(KbIndexAttribute attribute) => Attributes.Add(attribute);
+        public void AddAttribute(KbIndexAttribute attribute)
+        {
+            Attributes.Add(attribute);
+        }
     }
 }

@@ -7,19 +7,8 @@
         private bool _success = true;
         public new bool Success
         {
-            get
-            {
-                return _success && Collection.All(o => o.Success);
-            }
-            set
-            {
-                _success = value;
-            }
-        }
-
-        public void Add(KbBaseActionResponse result)
-        {
-            Collection.Add(result);
+            get => _success && Collection.All(o => o.Success);
+            set => _success = value;
         }
 
         public KbActionResponseCollection()
@@ -30,6 +19,11 @@
         {
             _success = false;
             ExceptionText = ex.Message;
+        }
+
+        public void Add(KbBaseActionResponse result)
+        {
+            Collection.Add(result);
         }
     }
 }
