@@ -4,7 +4,7 @@ namespace NTDLS.Katzebase.Client.Exceptions
 {
     public class KbExceptionBase : Exception
     {
-        public KbLogSeverity LogSeverity { get; set; } = KbLogSeverity.Debug;
+        public KbLogSeverity Severity { get; set; } = KbLogSeverity.Debug;
 
         public KbExceptionBase()
         {

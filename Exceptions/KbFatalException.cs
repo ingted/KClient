@@ -4,13 +4,13 @@
     {
         public KbFatalException()
         {
-            LogSeverity = KbConstants.KbLogSeverity.Fatal;
+            Severity = KbConstants.KbLogSeverity.Fatal;
         }
 
         public KbFatalException(string? message)
             : base($"Fatal exception: {message}.")
         {
-            LogSeverity = KbConstants.KbLogSeverity.Fatal;
+            Severity = KbConstants.KbLogSeverity.Fatal;
         }
     }
 }

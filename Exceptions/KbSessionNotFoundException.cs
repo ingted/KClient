@@ -4,13 +4,13 @@
     {
         public KbSessionNotFoundException()
         {
-            LogSeverity = KbConstants.KbLogSeverity.Warning;
+            Severity = KbConstants.KbLogSeverity.Warning;
         }
 
         public KbSessionNotFoundException(string message)
             : base($"Session not found: {message}.")
         {
-            LogSeverity = KbConstants.KbLogSeverity.Warning;
+            Severity = KbConstants.KbLogSeverity.Warning;
         }
     }
 }
