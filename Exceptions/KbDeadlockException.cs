@@ -8,7 +8,6 @@
 
         public KbDeadlockException(string message)
             : base($"Deadlock exception: {message}.")
-
         {
         }
 

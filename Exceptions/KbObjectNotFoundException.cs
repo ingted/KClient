@@ -8,7 +8,6 @@
 
         public KbObjectNotFoundException(string? message)
             : base($"Object not found exception: {message}.")
-
         {
         }
     }

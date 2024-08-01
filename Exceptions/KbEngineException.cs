@@ -8,7 +8,6 @@
 
         public KbEngineException(string message)
             : base($"Engine exception: {message}.")
-
         {
         }
     }

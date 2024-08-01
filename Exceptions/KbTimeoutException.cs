@@ -8,7 +8,6 @@
 
         public KbTimeoutException(string message)
             : base($"Function exception: {message}.")
-
         {
         }
     }

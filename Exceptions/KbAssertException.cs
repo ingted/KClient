@@ -4,12 +4,13 @@
     {
         public KbAssertException()
         {
+            LogSeverity = KbConstants.KbLogSeverity.Error;
         }
 
         public KbAssertException(string message)
             : base($"Assert exception: {message}.")
-
         {
+            LogSeverity = KbConstants.KbLogSeverity.Error;
         }
     }
 }

@@ -8,7 +8,6 @@
 
         public KbAPIResponseException(string? message)
             : base($"API exception: {message}.")
-
         {
         }
     }

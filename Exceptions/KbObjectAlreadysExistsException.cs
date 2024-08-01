@@ -8,7 +8,6 @@
 
         public KbObjectAlreadyExistsException(string? message)
             : base($"Object already exists exception: {message}.")
-
         {
         }
     }

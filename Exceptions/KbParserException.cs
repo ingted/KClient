@@ -8,7 +8,6 @@
 
         public KbParserException(string message)
             : base($"Parser exception: {message}.")
-
         {
         }
     }
