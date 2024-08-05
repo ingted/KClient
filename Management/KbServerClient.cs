@@ -22,14 +22,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQueryServerStartSession()).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQueryServerStartSession())
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
         /// <summary>
@@ -42,14 +36,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             _client.Connection.Query(
-                new KbQueryServerCloseSession(_client.ServerConnectionId)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                });
+                new KbQueryServerCloseSession(_client.ServerConnectionId))
+                .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
         /// <summary>
@@ -62,14 +50,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             _client.Connection.Query(
-                new KbQueryServerTerminateProcess(_client.ServerConnectionId, processId)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                });
+                new KbQueryServerTerminateProcess(_client.ServerConnectionId, processId))
+                .ContinueWith(t => _client.ValidateTaskResult(t));
         }
     }
 }

@@ -27,14 +27,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQueryProcedureExecute(_client.ServerConnectionId, procedure)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQueryProcedureExecute(_client.ServerConnectionId, procedure))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
     }
 }

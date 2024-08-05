@@ -7,7 +7,7 @@
         }
 
         public KbGenericException(string? message)
-            : base($"Generic exception: {message}.")
+            : base(message)
         {
         }
     }

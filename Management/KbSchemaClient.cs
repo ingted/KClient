@@ -1,5 +1,4 @@
-﻿using NTDLS.Katzebase.Client.Exceptions;
-using NTDLS.Katzebase.Client.Payloads;
+﻿using NTDLS.Katzebase.Client.Payloads;
 using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
@@ -25,14 +24,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             _client.Connection.Query(
-                new KbQuerySchemaCreate(_client.ServerConnectionId, schema, pageSize)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                });
+                new KbQuerySchemaCreate(_client.ServerConnectionId, schema, pageSize))
+                .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
         /// <summary>
@@ -63,14 +56,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQuerySchemaExists(_client.ServerConnectionId, schema)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result.Value;
+                new KbQuerySchemaExists(_client.ServerConnectionId, schema))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result.Value;
         }
 
         /// <summary>
@@ -82,14 +69,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             _client.Connection.Query(
-                new KbQuerySchemaDrop(_client.ServerConnectionId, schema)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                });
+                new KbQuerySchemaDrop(_client.ServerConnectionId, schema))
+                .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
         /// <summary>
@@ -115,14 +96,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQuerySchemaList(_client.ServerConnectionId, schema)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQuerySchemaList(_client.ServerConnectionId, schema))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
         /// <summary>
@@ -134,14 +109,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQuerySchemaList(_client.ServerConnectionId, ":")).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQuerySchemaList(_client.ServerConnectionId, ":"))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
     }
 }

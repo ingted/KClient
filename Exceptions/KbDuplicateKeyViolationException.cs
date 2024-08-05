@@ -7,8 +7,7 @@
         }
 
         public KbDuplicateKeyViolationException(string message)
-            : base($"Duplicate key violation exception: {message}.")
-
+            : base(message)
         {
         }
     }

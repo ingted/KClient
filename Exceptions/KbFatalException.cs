@@ -8,7 +8,7 @@
         }
 
         public KbFatalException(string? message)
-            : base($"Fatal exception: {message}.")
+            : base(message)
         {
             Severity = KbConstants.KbLogSeverity.Fatal;
         }

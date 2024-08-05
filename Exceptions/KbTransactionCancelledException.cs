@@ -7,7 +7,7 @@
         }
 
         public KbTransactionCancelledException(string message)
-            : base($"Transaction Cancelled: {message}.")
+            : base(message)
         {
         }
     }

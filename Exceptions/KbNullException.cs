@@ -7,7 +7,7 @@
         }
 
         public KbNullException(string message)
-            : base($"Null exception: {message}.")
+            : base(message)
         {
         }
     }

@@ -8,7 +8,7 @@
         }
 
         public KbNotImplementedException(string message)
-            : base($"Not implemented exception: {message}.")
+            : base(message)
         {
             Severity = KbConstants.KbLogSeverity.Fatal;
         }

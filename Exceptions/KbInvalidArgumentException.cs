@@ -7,7 +7,7 @@
         }
 
         public KbInvalidArgumentException(string message)
-            : base($"Invalid argument exception: {message}.")
+            : base(message)
         {
         }
     }

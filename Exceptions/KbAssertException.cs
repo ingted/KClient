@@ -8,7 +8,7 @@
         }
 
         public KbAssertException(string message)
-            : base($"Assert exception: {message}.")
+            : base(message)
         {
             Severity = KbConstants.KbLogSeverity.Error;
         }

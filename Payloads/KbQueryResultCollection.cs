@@ -9,13 +9,6 @@
 
         public List<KbQueryDocumentListResult> Collection { get; set; } = new();
 
-        private bool _success = true;
-        public new bool Success
-        {
-            get => _success && Collection.All(o => o.Success);
-            set => _success = value;
-        }
-
         public KbQueryDocumentListResult AddNew()
         {
             var result = new KbQueryDocumentListResult();
@@ -38,8 +31,6 @@
             return new KbQueryDocumentListResult()
             {
                 RowCount = actionResponse.RowCount,
-                Success = actionResponse.Success,
-                ExceptionText = actionResponse.ExceptionText,
                 Metrics = actionResponse.Metrics,
                 Explanation = actionResponse.Explanation,
             };

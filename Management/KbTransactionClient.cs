@@ -1,5 +1,4 @@
-﻿using NTDLS.Katzebase.Client.Exceptions;
-using NTDLS.Katzebase.Client.Payloads.RoundTrip;
+﻿using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
 {
@@ -17,14 +16,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             _client.Connection.Query(
-                new KbQueryTransactionBegin(_client.ServerConnectionId)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                });
+                new KbQueryTransactionBegin(_client.ServerConnectionId))
+                .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
         public void Commit()
@@ -32,14 +25,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             _client.Connection.Query(
-                new KbQueryTransactionCommit(_client.ServerConnectionId)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                });
+                new KbQueryTransactionCommit(_client.ServerConnectionId))
+                .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
         public void Rollback()
@@ -47,14 +34,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             _client.Connection.Query(
-                new KbQueryTransactionRollback(_client.ServerConnectionId)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                });
+                new KbQueryTransactionRollback(_client.ServerConnectionId))
+                .ContinueWith(t => _client.ValidateTaskResult(t));
         }
     }
 }

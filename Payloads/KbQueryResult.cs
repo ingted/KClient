@@ -24,8 +24,6 @@
             {
                 Messages = actionResponse.Messages,
                 RowCount = actionResponse.RowCount,
-                Success = actionResponse.Success,
-                ExceptionText = actionResponse.ExceptionText,
                 Metrics = actionResponse.Metrics,
                 Explanation = actionResponse.Explanation,
                 Duration = actionResponse.Duration,

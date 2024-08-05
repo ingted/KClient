@@ -7,7 +7,7 @@
         }
 
         public KbFunctionException(string message)
-            : base($"Function exception: {message}.")
+            : base(message)
         {
         }
     }

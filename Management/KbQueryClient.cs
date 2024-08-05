@@ -1,5 +1,4 @@
-﻿using NTDLS.Katzebase.Client.Exceptions;
-using NTDLS.Katzebase.Client.Payloads;
+﻿using NTDLS.Katzebase.Client.Payloads;
 using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
@@ -18,14 +17,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQueryQueryExplain(_client.ServerConnectionId, statement)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQueryQueryExplain(_client.ServerConnectionId, statement))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
         public KbQueryResultCollection ExecuteQuery(string statement)
@@ -33,14 +26,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQueryQueryExecuteQuery(_client.ServerConnectionId, statement)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQueryQueryExecuteQuery(_client.ServerConnectionId, statement))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
         public KbQueryResultCollection ExecuteQueries(List<string> statements)
@@ -48,14 +35,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQueryQueryExecuteQueries(_client.ServerConnectionId, statements)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQueryQueryExecuteQueries(_client.ServerConnectionId, statements))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
         public KbActionResponseCollection ExecuteNonQuery(string statement)
@@ -63,14 +44,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQueryQueryExecuteNonQuery(_client.ServerConnectionId, statement)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQueryQueryExecuteNonQuery(_client.ServerConnectionId, statement))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
     }
 }

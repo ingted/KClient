@@ -13,6 +13,8 @@ namespace NTDLS.Katzebase.Client.Management
             _client = client;
         }
 
+
+
         /// <summary>
         /// Stores a document in the given schema.
         /// </summary>
@@ -23,13 +25,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             _client.Connection.Query(
-                new KbQueryDocumentStore(_client.ServerConnectionId, schema, document)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                });
+                new KbQueryDocumentStore(_client.ServerConnectionId, schema, document))
+                .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
         /// <summary>
@@ -42,13 +39,9 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             _client.Connection.Query(
-                new KbQueryDocumentStore(_client.ServerConnectionId, schema, new KbDocument(document))).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                });
+                new KbQueryDocumentStore(_client.ServerConnectionId, schema, new KbDocument(document)))
+                .ContinueWith(t => _client.ValidateTaskResult(t));
+
         }
 
         /// <summary>
@@ -63,13 +56,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             _client.Connection.Query(
-                new KbQueryDocumentDeleteById(_client.ServerConnectionId, schema, id)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                });
+                new KbQueryDocumentDeleteById(_client.ServerConnectionId, schema, id))
+                .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
         /// <summary>
@@ -80,14 +68,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQueryDocumentCatalog(_client.ServerConnectionId, schema)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQueryDocumentCatalog(_client.ServerConnectionId, schema))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
         /// <summary>
@@ -99,14 +81,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQueryDocumentList(_client.ServerConnectionId, schema, count)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQueryDocumentList(_client.ServerConnectionId, schema, count))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
         /// <summary>
@@ -118,14 +94,8 @@ namespace NTDLS.Katzebase.Client.Management
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             return _client.Connection.Query(
-                new KbQueryDocumentSample(_client.ServerConnectionId, schema, count)).ContinueWith(t =>
-                {
-                    if (t.Result?.Success != true)
-                    {
-                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
-                    }
-                    return t.Result;
-                }).Result;
+                new KbQueryDocumentSample(_client.ServerConnectionId, schema, count))
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
     }
 }

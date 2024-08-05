@@ -8,7 +8,7 @@
         }
 
         public KbSessionNotFoundException(string message)
-            : base($"Session not found: {message}.")
+            : base(message)
         {
             Severity = KbConstants.KbLogSeverity.Warning;
         }

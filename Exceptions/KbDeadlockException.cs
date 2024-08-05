@@ -7,12 +7,12 @@
         }
 
         public KbDeadlockException(string message)
-            : base($"Deadlock exception: {message}.")
+            : base(message)
         {
         }
 
         public KbDeadlockException(string message, string explanation)
-            : base($"Deadlock exception: {message}.\r\n\r\nExplanation:\r\n{explanation}")
+            : base($"Deadlock: {message}\r\n\r\nExplanation:\r\n{explanation}")
         {
         }
     }
