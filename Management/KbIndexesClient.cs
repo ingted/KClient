@@ -29,7 +29,7 @@ namespace NTDLS.Katzebase.Client.Management
                 {
                     if (t.Result?.Success != true)
                     {
-                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
                     }
                 });
         }
@@ -48,7 +48,7 @@ namespace NTDLS.Katzebase.Client.Management
                 {
                     if (t.Result?.Success != true)
                     {
-                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
                     }
                     return t.Result;
                 }).Result.Value;
@@ -68,7 +68,7 @@ namespace NTDLS.Katzebase.Client.Management
                 {
                     if (t.Result?.Success != true)
                     {
-                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
                     }
                     return t.Result;
                 }).Result;
@@ -91,7 +91,7 @@ namespace NTDLS.Katzebase.Client.Management
                 {
                     if (t.Result?.Success != true)
                     {
-                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
                     }
                 });
         }
@@ -110,7 +110,7 @@ namespace NTDLS.Katzebase.Client.Management
                 {
                     if (t.Result?.Success != true)
                     {
-                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
                     }
                 });
         }
@@ -128,7 +128,7 @@ namespace NTDLS.Katzebase.Client.Management
                 {
                     if (t.Result?.Success != true)
                     {
-                        throw new KbAPIResponseException(t.Result == null ? "Invalid response" : t.Result?.ExceptionText);
+                        throw new KbAPIResponseException(t.Exception?.Message ?? "Unspecified api error has occurred.");
                     }
                     return t.Result;
                 }).Result;
