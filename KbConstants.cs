@@ -50,9 +50,25 @@
 
         public enum KbMessageType
         {
+            /// <summary>
+            /// When communicating verbose information with the query result.
+            /// </summary>
             Verbose,
+            /// <summary>
+            /// When communicating warnings with the query result.
+            /// </summary>
             Warning,
+            /// <summary>
+            /// When communicating errors with the query result.
+            /// </summary>
             Error,
+            /// <summary>
+            /// Used when explaining index/query with the query result.
+            /// </summary>
+            Explain,
+            /// <summary>
+            /// When communicating deadlock messages with the query result.
+            /// </summary>
             Deadlock
         }
 
