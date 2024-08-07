@@ -5,12 +5,12 @@ namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
     public class KbQueryQueryExecuteQuery : IRmQuery<KbQueryQueryExecuteQueryReply>
     {
         public Guid ConnectionId { get; set; }
-        public string Statement { get; set; }
+        public List<string> Statements { get; set; }
 
-        public KbQueryQueryExecuteQuery(Guid connectionId, string statement)
+        public KbQueryQueryExecuteQuery(Guid connectionId, List<string> statements)
         {
             ConnectionId = connectionId;
-            Statement = statement;
+            Statements = statements;
         }
     }
 
