@@ -112,7 +112,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Lists the existing root schemas.
         /// </summary>
         /// <param name="schema"></param>
-        public KbActionResponseSchemaCollection List(TimeSpan? queryTimeout = null)
+        public KbQuerySchemaListReply List(TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 

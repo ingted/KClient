@@ -52,7 +52,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="indexName"></param>
-        public KbActionResponseIndex Get(string schema, string indexName, TimeSpan? queryTimeout = null)
+        public KbQueryIndexGetReply Get(string schema, string indexName, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 

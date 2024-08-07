@@ -12,7 +12,7 @@ namespace NTDLS.Katzebase.Client.Management
             _client = client;
         }
 
-        public KbQueryResultCollection ExplainQuery(string statement, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExplainReply ExplainQuery(string statement, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -23,7 +23,17 @@ namespace NTDLS.Katzebase.Client.Management
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
-        public KbQueryResultCollection ExecuteQuery(string statement, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExplainQueriesReply ExplainQueries(List<string> statements, TimeSpan? queryTimeout = null)
+        {
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
+
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
+            return _client.Connection.Query(
+                new KbQueryQueryExplainQueries(_client.ServerConnectionId, statements), (TimeSpan)queryTimeout)
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
+        }
+        public KbQueryQueryExecuteQueryReply ExecuteQuery(string statement, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -34,7 +44,7 @@ namespace NTDLS.Katzebase.Client.Management
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
-        public KbQueryResultCollection ExecuteQueries(List<string> statements, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExecuteQueriesReply ExecuteQueries(List<string> statements, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -45,7 +55,7 @@ namespace NTDLS.Katzebase.Client.Management
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
-        public KbActionResponseCollection ExecuteNonQuery(string statement, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExecuteNonQueryReply ExecuteNonQuery(string statement, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
