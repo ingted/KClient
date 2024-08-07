@@ -12,14 +12,14 @@ namespace NTDLS.Katzebase.Client.Management
             _client = client;
         }
 
-        public KbQueryQueryExplainReply ExplainQuery(string statement, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExplainQueryReply ExplainQuery(string statement, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExplain(_client.ServerConnectionId, statement), (TimeSpan)queryTimeout)
+                new KbQueryQueryExplainQuery(_client.ServerConnectionId, statement), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
