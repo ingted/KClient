@@ -1,5 +1,4 @@
-﻿using NTDLS.Katzebase.Client.Payloads;
-using NTDLS.Katzebase.Client.Payloads.RoundTrip;
+﻿using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
 {
