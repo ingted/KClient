@@ -14,7 +14,7 @@ namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
         }
     }
 
-    public class KbQueryQueryExplainQueriesReply : KbQueryResultCollection, IRmQueryReply
+    public class KbQueryQueryExplainQueriesReply : KbQueryExplainCollection, IRmQueryReply
     {
     }
 }
