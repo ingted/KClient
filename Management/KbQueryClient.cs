@@ -1,5 +1,4 @@
-﻿using NTDLS.Katzebase.Client.Payloads;
-using NTDLS.Katzebase.Client.Payloads.RoundTrip;
+﻿using NTDLS.Katzebase.Client.Payloads.RoundTrip;
 
 namespace NTDLS.Katzebase.Client.Management
 {
@@ -40,7 +39,7 @@ namespace NTDLS.Katzebase.Client.Management
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExecuteQuery(_client.ServerConnectionId, new List<string> { statement }), (TimeSpan)queryTimeout)
+                new KbQueryQueryExecuteQuery(_client.ServerConnectionId, statement), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
