@@ -18,6 +18,21 @@ namespace NTDLS.Katzebase.Client
         public delegate void CommunicationExceptionEvent(KbClient sender, KbSessionInfo sessionInfo, Exception ex);
         public event CommunicationExceptionEvent? OnCommunicationException;
 
+        private TimeSpan _queryTimeout = TimeSpan.FromSeconds(30);
+
+        public TimeSpan QueryTimeout
+        {
+            get { return _queryTimeout; }
+            set
+            {
+                _queryTimeout = value;
+                if (Connection?.IsConnected == true)
+                {
+                    Connection.QueryTimeout = _queryTimeout;
+                }
+            }
+        }
+
         internal RmClient? Connection { get; private set; }
 
         public string Host { get; set; } = string.Empty;
@@ -77,7 +92,11 @@ namespace NTDLS.Katzebase.Client
 
             try
             {
-                Connection = new RmClient();
+                Connection = new RmClient(new RmConfiguration
+                {
+                    QueryTimeout = _queryTimeout
+                });
+
                 Connection.OnException += (RmContext? context, Exception ex, IRmPayload? payload) =>
                 {
                     var sessionInfo = new KbSessionInfo

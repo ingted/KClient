@@ -17,12 +17,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// </summary>
         /// <returns></returns>
         /// <exception cref="KbAPIResponseException"></exception>
-        public KbQueryServerStartSessionReply StartSession()
+        public KbQueryServerStartSessionReply StartSession(TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             return _client.Connection.Query(
-                new KbQueryServerStartSession())
+                new KbQueryServerStartSession(), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
@@ -31,12 +33,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// </summary>
         /// <returns></returns>
         /// <exception cref="KbAPIResponseException"></exception>
-        public void CloseSession()
+        public void CloseSession(TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             _client.Connection.Query(
-                new KbQueryServerCloseSession(_client.ServerConnectionId))
+                new KbQueryServerCloseSession(_client.ServerConnectionId), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
@@ -45,12 +49,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// </summary>
         /// <returns></returns>
         /// <exception cref="KbAPIResponseException"></exception>
-        public void TerminateProcess(ulong processId)
+        public void TerminateProcess(ulong processId, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             _client.Connection.Query(
-                new KbQueryServerTerminateProcess(_client.ServerConnectionId, processId))
+                new KbQueryServerTerminateProcess(_client.ServerConnectionId, processId), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t));
         }
     }

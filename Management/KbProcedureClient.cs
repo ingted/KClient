@@ -22,12 +22,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// <param name="procedure"></param>
         /// <returns></returns>
         /// <exception cref="KbAPIResponseException"></exception>
-        public KbQueryProcedureExecuteReply Execute(KbProcedure procedure)
+        public KbQueryProcedureExecuteReply Execute(KbProcedure procedure, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             return _client.Connection.Query(
-                new KbQueryProcedureExecute(_client.ServerConnectionId, procedure))
+                new KbQueryProcedureExecute(_client.ServerConnectionId, procedure), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
     }

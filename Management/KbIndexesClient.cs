@@ -20,12 +20,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// <param name="index"></param>
         /// <exception cref="Exception"></exception>
         /// <exception cref="KbAPIResponseException"></exception>
-        public void Create(string schema, KbIndex index)
+        public void Create(string schema, KbIndex index, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             _client.Connection.Query(
-                new KbQueryIndexCreate(_client.ServerConnectionId, schema, index))
+                new KbQueryIndexCreate(_client.ServerConnectionId, schema, index), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
@@ -34,12 +36,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="indexName"></param>
-        public bool Exists(string schema, string indexName)
+        public bool Exists(string schema, string indexName, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             return _client.Connection.Query(
-                new KbQueryIndexExists(_client.ServerConnectionId, schema, indexName))
+                new KbQueryIndexExists(_client.ServerConnectionId, schema, indexName), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result.Value;
         }
 
@@ -48,12 +52,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="indexName"></param>
-        public KbActionResponseIndex Get(string schema, string indexName)
+        public KbActionResponseIndex Get(string schema, string indexName, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             return _client.Connection.Query(
-                new KbQueryIndexGet(_client.ServerConnectionId, schema, indexName))
+                new KbQueryIndexGet(_client.ServerConnectionId, schema, indexName), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
@@ -65,12 +71,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// <param name="newPartitionCount"></param>
         /// <exception cref="Exception"></exception>
         /// <exception cref="KbAPIResponseException"></exception>
-        public void Rebuild(string schema, string indexName, uint newPartitionCount = 0)
+        public void Rebuild(string schema, string indexName, uint newPartitionCount = 0, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             _client.Connection.Query(
-                new KbQueryIndexRebuild(_client.ServerConnectionId, schema, indexName, newPartitionCount))
+                new KbQueryIndexRebuild(_client.ServerConnectionId, schema, indexName, newPartitionCount), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
@@ -79,12 +87,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="indexName"></param>
-        public void Drop(string schema, string indexName)
+        public void Drop(string schema, string indexName, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             _client.Connection.Query(
-                new KbQueryIndexDrop(_client.ServerConnectionId, schema, indexName))
+                new KbQueryIndexDrop(_client.ServerConnectionId, schema, indexName), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
@@ -92,12 +102,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// Lists all indexes on a given schema
         /// </summary>
         /// <param name="schema"></param>
-        public KbActionResponseIndexes List(string schema)
+        public KbActionResponseIndexes List(string schema, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             return _client.Connection.Query(
-                new KbQueryIndexList(_client.ServerConnectionId, schema))
+                new KbQueryIndexList(_client.ServerConnectionId, schema), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
     }

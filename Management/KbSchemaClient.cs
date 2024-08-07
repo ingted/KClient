@@ -19,12 +19,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// Creates a single schema.
         /// </summary>
         /// <param name="schema"></param>
-        public void Create(string schema, uint pageSize = 0)
+        public void Create(string schema, uint pageSize = 0, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             _client.Connection.Query(
-                new KbQuerySchemaCreate(_client.ServerConnectionId, schema, pageSize))
+                new KbQuerySchemaCreate(_client.ServerConnectionId, schema, pageSize), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
@@ -32,16 +34,16 @@ namespace NTDLS.Katzebase.Client.Management
         /// Creates a full schema path.
         /// </summary>
         /// <param name="schema"></param>
-        public void CreateRecursive(string schema, uint pageSize = 0)
+        public void CreateRecursive(string schema, uint pageSize = 0, TimeSpan? queryTimeout = null)
         {
             string fullSchema = string.Empty;
 
             foreach (var part in schema.Split(':'))
             {
                 fullSchema += part;
-                if (Exists(fullSchema) == false)
+                if (Exists(fullSchema, queryTimeout) == false)
                 {
-                    Create(fullSchema, pageSize);
+                    Create(fullSchema, pageSize, queryTimeout);
                 }
                 fullSchema += ':';
             }
@@ -51,12 +53,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// Checks for the existence of a schema.
         /// </summary>
         /// <param name="schema"></param>
-        public bool Exists(string schema)
+        public bool Exists(string schema, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             return _client.Connection.Query(
-                new KbQuerySchemaExists(_client.ServerConnectionId, schema))
+                new KbQuerySchemaExists(_client.ServerConnectionId, schema), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result.Value;
         }
 
@@ -64,12 +68,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// Drops a single schema or an entire schema path.
         /// </summary>
         /// <param name="schema"></param>
-        public void Drop(string schema)
+        public void Drop(string schema, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             _client.Connection.Query(
-                new KbQuerySchemaDrop(_client.ServerConnectionId, schema))
+                new KbQuerySchemaDrop(_client.ServerConnectionId, schema), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t));
         }
 
@@ -77,11 +83,11 @@ namespace NTDLS.Katzebase.Client.Management
         /// Drops a single schema or an entire schema path if it exists.
         /// </summary>
         /// <param name="schema"></param>
-        public bool DropIfExists(string schema)
+        public bool DropIfExists(string schema, TimeSpan? queryTimeout = null)
         {
-            if (Exists(schema))
+            if (Exists(schema, queryTimeout))
             {
-                Drop(schema);
+                Drop(schema, queryTimeout);
                 return true;
             }
             return false;
@@ -91,12 +97,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// Lists the existing schemas within a given schema.
         /// </summary>
         /// <param name="schema"></param>
-        public KbQuerySchemaListReply List(string schema)
+        public KbQuerySchemaListReply List(string schema, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             return _client.Connection.Query(
-                new KbQuerySchemaList(_client.ServerConnectionId, schema))
+                new KbQuerySchemaList(_client.ServerConnectionId, schema), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
@@ -104,12 +112,14 @@ namespace NTDLS.Katzebase.Client.Management
         /// Lists the existing root schemas.
         /// </summary>
         /// <param name="schema"></param>
-        public KbActionResponseSchemaCollection List()
+        public KbActionResponseSchemaCollection List(TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
             return _client.Connection.Query(
-                new KbQuerySchemaList(_client.ServerConnectionId, ":"))
+                new KbQuerySchemaList(_client.ServerConnectionId, ":"), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
     }

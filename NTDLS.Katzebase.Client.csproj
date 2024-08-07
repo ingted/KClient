@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <Company>NetworkDLS</Company>
     <Copyright>Copyright © 2024 NetworkDLS</Copyright>
-    <Version>1.4.1</Version>
+    <Version>1.4.2</Version>
     <Authors>NetworkDLS</Authors>
     <ApplicationIcon>@Art\IconFull.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -26,7 +26,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>database;nosql;rdbms;webapi;unstructured-data</PackageTags>
     <PackageReleaseNotes>
-        Major changed to exception handling and passthrough of those exceptions.
+        Added default query timeout and optional query timeout per query.
 	</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
@@ -42,7 +42,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NTDLS.Helpers" Version="1.2.6" />
-    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.9.1" />
+    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.9.3" />
   </ItemGroup>
 
   <ItemGroup>
