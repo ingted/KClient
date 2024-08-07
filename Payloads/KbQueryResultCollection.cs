@@ -32,8 +32,8 @@
             {
                 RowCount = actionResponse.RowCount,
                 Metrics = actionResponse.Metrics,
-                Explanation = actionResponse.Explanation,
                 Warnings = actionResponse.Warnings,
+                Messages = actionResponse.Messages,
                 Duration = actionResponse.Duration,
             };
         }
