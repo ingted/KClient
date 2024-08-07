@@ -25,7 +25,6 @@
                 Messages = actionResponse.Messages,
                 RowCount = actionResponse.RowCount,
                 Metrics = actionResponse.Metrics,
-                Explanation = actionResponse.Explanation,
                 Duration = actionResponse.Duration,
             };
         }
