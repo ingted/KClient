@@ -24,9 +24,9 @@ namespace NTDLS.Katzebase.Client.Management
 
             queryTimeout ??= _client.Connection.QueryTimeout;
 
-            _client.Connection.Query(
+            _ = _client.Connection.Query(
                 new KbQuerySchemaCreate(_client.ServerConnectionId, schema, pageSize), (TimeSpan)queryTimeout)
-                .ContinueWith(t => _client.ValidateTaskResult(t));
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
         /// <summary>
@@ -73,9 +73,9 @@ namespace NTDLS.Katzebase.Client.Management
 
             queryTimeout ??= _client.Connection.QueryTimeout;
 
-            _client.Connection.Query(
+            _ = _client.Connection.Query(
                 new KbQuerySchemaDrop(_client.ServerConnectionId, schema), (TimeSpan)queryTimeout)
-                .ContinueWith(t => _client.ValidateTaskResult(t));
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
         /// <summary>
