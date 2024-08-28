@@ -11,27 +11,50 @@ namespace NTDLS.Katzebase.Client.Management
             _client = client;
         }
 
-        public KbQueryQueryExplainQueryReply ExplainQuery(string statement, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExplainQueryReply ExplainOperation(string statement, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExplainQuery(_client.ServerConnectionId, statement), (TimeSpan)queryTimeout)
+                new KbQueryQueryExplainOperation(_client.ServerConnectionId, statement), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
-        public KbQueryQueryExplainQueriesReply ExplainQueries(List<string> statements, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExplainQueriesReply ExplainOperations(List<string> statements, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExplainQueries(_client.ServerConnectionId, statements), (TimeSpan)queryTimeout)
+                new KbQueryQueryExplainOperations(_client.ServerConnectionId, statements), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
+
+        public KbQueryQueryExplainQueryReply ExplainPlan(string statement, TimeSpan? queryTimeout = null)
+        {
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
+
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
+            return _client.Connection.Query(
+                new KbQueryQueryExplainOperation(_client.ServerConnectionId, statement), (TimeSpan)queryTimeout)
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
+        }
+
+        public KbQueryQueryExplainQueriesReply ExplainPlans(List<string> statements, TimeSpan? queryTimeout = null)
+        {
+            if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
+
+            queryTimeout ??= _client.Connection.QueryTimeout;
+
+            return _client.Connection.Query(
+                new KbQueryQueryExplainOperations(_client.ServerConnectionId, statements), (TimeSpan)queryTimeout)
+                .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
+        }
+
         public KbQueryQueryExecuteQueryReply ExecuteQuery(string statement, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
