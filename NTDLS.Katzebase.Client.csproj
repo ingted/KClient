@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <Company>NetworkDLS</Company>
     <Copyright>Copyright © 2024 NetworkDLS</Copyright>
-    <Version>1.5.9</Version>
+    <Version>1.5.10</Version>
     <Authors>NetworkDLS</Authors>
     <ApplicationIcon>@Art\IconFull.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -42,7 +42,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NTDLS.Helpers" Version="1.2.8" />
-    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.10.8" />
+    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.10.9" />
   </ItemGroup>
 
   <ItemGroup>
