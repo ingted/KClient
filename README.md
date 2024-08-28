@@ -10,9 +10,9 @@ Katzebase is an ACID compliant document-based database written in C# using .NET 
 ## Documentation and Links
 - Check out the **full documentation** at [https://katzebase.com/](https://katzebase.com/)
 - **Server / Service** code and releases: https://github.com/NTDLS/NTDLS.Katzebase.Server
+- **Management UI** code and releases: https://github.com/NTDLS/NTDLS.Katzebase.Management
 - **Client Connectivity Libraries** code and releases: https://github.com/NTDLS/NTDLS.Katzebase.Client
 - **SQL Server Migration Tool** code and releases: https://github.com/NTDLS/NTDLS.Katzebase.SQLServerMigration
-- **Management UI** code and releases: https://github.com/NTDLS/NTDLS.Katzebase.Management
 
 ## Contributing
 
