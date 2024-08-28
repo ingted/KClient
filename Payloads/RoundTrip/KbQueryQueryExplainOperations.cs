@@ -2,7 +2,7 @@
 
 namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
 {
-    public class KbQueryQueryExplainOperations : IRmQuery<KbQueryQueryExplainQueriesReply>
+    public class KbQueryQueryExplainOperations : IRmQuery<KbQueryQueryExplainOperationsReply>
     {
         public Guid ConnectionId { get; set; }
         public List<string> Statements { get; set; }
@@ -14,7 +14,7 @@ namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
         }
     }
 
-    public class KbQueryQueryExplainQueriesReply : KbQueryExplainCollection, IRmQueryReply
+    public class KbQueryQueryExplainOperationsReply : KbQueryExplainCollection, IRmQueryReply
     {
     }
 }
