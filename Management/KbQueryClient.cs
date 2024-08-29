@@ -56,7 +56,7 @@ namespace NTDLS.Katzebase.Client.Management
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
-        public KbQueryQueryExecuteQueryReply Query(string statement, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExecuteQueryReply Fetch(string statement, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -67,7 +67,7 @@ namespace NTDLS.Katzebase.Client.Management
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
-        public List<T> Query<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
+        public List<T> Fetch<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -89,19 +89,19 @@ namespace NTDLS.Katzebase.Client.Management
             return resultCollection.Collection[0].MapTo<T>();
         }
 
-        public T QuerySingle<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
-            => Query<T>(statement, queryTimeout).Single();
+        public T FetchSingle<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
+            => Fetch<T>(statement, queryTimeout).Single();
 
-        public T? SingleOrDefault<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
-            => Query<T>(statement, queryTimeout).SingleOrDefault();
+        public T? FetchSingleOrDefault<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
+            => Fetch<T>(statement, queryTimeout).SingleOrDefault();
 
-        public T QueryFirst<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
-            => Query<T>(statement, queryTimeout).First();
+        public T FetchFirst<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
+            => Fetch<T>(statement, queryTimeout).First();
 
-        public T? QueryFirstOrDefault<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
-            => Query<T>(statement, queryTimeout).FirstOrDefault();
+        public T? FetchFirstOrDefault<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
+            => Fetch<T>(statement, queryTimeout).FirstOrDefault();
 
-        public KbQueryQueryExecuteQueriesReply Multiple(List<string> statements, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExecuteQueriesReply ExecuteMultiple(List<string> statements, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -112,7 +112,7 @@ namespace NTDLS.Katzebase.Client.Management
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
-        public KbQueryQueryExecuteNonQueryReply NonQuery(string statement, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExecuteNonQueryReply ExecuteNonQuery(string statement, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
