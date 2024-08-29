@@ -37,9 +37,11 @@ namespace NTDLS.Katzebase.Client
 
         internal RmClient? Connection { get; private set; }
 
-        public string Host { get; set; } = string.Empty;
-        public int Port { get; set; }
-        public ulong ProcessId { get; set; }
+        public string Host { get; private set; } = string.Empty;
+        public int Port { get; private set; }
+        public ulong ProcessId { get; private set; }
+        public string Username { get; private set; } = string.Empty;
+        public string ClientName { get; private set; } = string.Empty;
         public Guid ServerConnectionId { get; private set; }
 
         public KbDocumentClient Document { get; private set; }
@@ -84,10 +86,21 @@ namespace NTDLS.Katzebase.Client
             return builder.ToString();
         }
 
-        public void Connect(string hostname, int port, string userName, string password, string? clientName = null)
+        /// <summary>
+        /// Connects to an instance of the server
+        /// </summary>
+        /// <param name="hostname">Host or ip of the server.</param>
+        /// <param name="port">TCP/IP port of the server</param>
+        /// <param name="username">Username to log in with.</param>
+        /// <param name="passwordHash">SHA256 of the password for the given user.</param>
+        /// <param name="clientName">Name of the client that is connecting to the server.</param>
+        /// <exception cref="KbGenericException"></exception>
+        public void Connect(string hostname, int port, string username, string passwordHash, string clientName)
         {
             Host = hostname;
             Port = port;
+            Username = username;
+            ClientName = clientName;
 
             if (string.IsNullOrWhiteSpace(clientName))
             {
@@ -134,7 +147,7 @@ namespace NTDLS.Katzebase.Client
 
                 Connection.Connect(hostname, port);
 
-                var reply = Server.StartSession(userName, GetSHA256Hash(password), clientName);
+                var reply = Server.StartSession(username, passwordHash, clientName);
                 ServerConnectionId = reply.ConnectionId;
                 ProcessId = reply.ProcessId;
 
