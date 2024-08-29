@@ -4,8 +4,15 @@ namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
 {
     public class KbQueryServerStartSession : IRmQuery<KbQueryServerStartSessionReply>
     {
-        public KbQueryServerStartSession()
+        public string Username { get; set; }
+        public string PasswordHash { get; set; }
+        public string ClientName { get; set; }
+
+        public KbQueryServerStartSession(string username, string passwordHash, string clientName)
         {
+            ClientName = clientName;
+            Username = username;
+            PasswordHash = passwordHash;
         }
     }
 

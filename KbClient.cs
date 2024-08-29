@@ -4,6 +4,8 @@ using NTDLS.Katzebase.Client.Management;
 using NTDLS.Katzebase.Client.Payloads;
 using NTDLS.ReliableMessaging;
 using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace NTDLS.Katzebase.Client
 {
@@ -37,7 +39,6 @@ namespace NTDLS.Katzebase.Client
 
         public string Host { get; set; } = string.Empty;
         public int Port { get; set; }
-        public string ClientName { get; private set; }
         public ulong ProcessId { get; set; }
         public Guid ServerConnectionId { get; private set; }
 
@@ -50,8 +51,6 @@ namespace NTDLS.Katzebase.Client
 
         public KbClient()
         {
-            ClientName = Process.GetCurrentProcess().ProcessName;
-
             Document = new KbDocumentClient(this);
             Schema = new KbSchemaClient(this);
             Server = new KbServerClient(this);
@@ -60,10 +59,8 @@ namespace NTDLS.Katzebase.Client
             Procedure = new KbProcedureClient(this);
         }
 
-        public KbClient(string hostName, int serverPort, string clientName = "")
+        public KbClient(string hostName, int serverPort, string userName, string password, string clientName = "")
         {
-            ClientName = clientName;
-
             Document = new KbDocumentClient(this);
             Schema = new KbSchemaClient(this);
             Server = new KbServerClient(this);
@@ -71,18 +68,30 @@ namespace NTDLS.Katzebase.Client
             Query = new KbQueryClient(this);
             Procedure = new KbProcedureClient(this);
 
-            Connect(hostName, serverPort, clientName);
+            Connect(hostName, serverPort, userName, password, clientName);
         }
 
-        public void Connect(string hostname, int port, string clientName = "")
+        public static string GetSHA256Hash(string input)
+        {
+            var hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(input));
+
+            var builder = new StringBuilder();
+            for (int i = 0; i < hashBytes.Length; i++)
+            {
+                builder.Append(hashBytes[i].ToString("x2"));
+            }
+
+            return builder.ToString();
+        }
+
+        public void Connect(string hostname, int port, string userName, string password, string? clientName = null)
         {
             Host = hostname;
             Port = port;
-            ClientName = clientName;
 
-            if (string.IsNullOrWhiteSpace(ClientName))
+            if (string.IsNullOrWhiteSpace(clientName))
             {
-                ClientName = Process.GetCurrentProcess().ProcessName;
+                clientName = Process.GetCurrentProcess().ProcessName;
             }
 
             if (Connection?.IsConnected == true)
@@ -125,7 +134,7 @@ namespace NTDLS.Katzebase.Client
 
                 Connection.Connect(hostname, port);
 
-                var reply = Server.StartSession();
+                var reply = Server.StartSession(userName, GetSHA256Hash(password), clientName);
                 ServerConnectionId = reply.ConnectionId;
                 ProcessId = reply.ProcessId;
 
