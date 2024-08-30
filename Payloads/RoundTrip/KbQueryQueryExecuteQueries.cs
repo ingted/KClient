@@ -1,4 +1,5 @@
-﻿using NTDLS.ReliableMessaging;
+﻿using NTDLS.Katzebase.Client.Types;
+using NTDLS.ReliableMessaging;
 
 namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
 {
@@ -6,11 +7,13 @@ namespace NTDLS.Katzebase.Client.Payloads.RoundTrip
     {
         public Guid ConnectionId { get; set; }
         public List<string> Statements { get; set; }
+        public KbInsensitiveDictionary<string?>? UserParameters { get; set; }
 
-        public KbQueryQueryExecuteQueries(Guid connectionId, List<string> statements)
+        public KbQueryQueryExecuteQueries(Guid connectionId, List<string> statements, KbInsensitiveDictionary<string?>? userParameters)
         {
             ConnectionId = connectionId;
             Statements = statements;
+            UserParameters = userParameters;
         }
     }
 

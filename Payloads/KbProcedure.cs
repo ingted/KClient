@@ -1,8 +1,10 @@
-﻿namespace NTDLS.Katzebase.Client.Payloads
+﻿using NTDLS.Katzebase.Client.Types;
+
+namespace NTDLS.Katzebase.Client.Payloads
 {
     public class KbProcedure
     {
-        public KbProcedureParameters Parameters { get; private set; } = new();
+        public KbInsensitiveDictionary<string?>? UserParameters { get; set; } = null;
 
         public string ProcedureName { get; set; }
         public string SchemaName { get; set; }
@@ -13,26 +15,29 @@
             SchemaName = string.Empty;
         }
 
-        public KbProcedure(string fullProcedureName)
+        public KbProcedure(string fullyQualifiedProcedureName, KbInsensitiveDictionary<string?>? userParameters = null)
         {
-            int lastIndexOf = fullProcedureName.LastIndexOf(':');
+            UserParameters = userParameters;
+
+            int lastIndexOf = fullyQualifiedProcedureName.LastIndexOf(':');
 
             if (lastIndexOf < 0)
             {
-                ProcedureName = fullProcedureName;
+                ProcedureName = fullyQualifiedProcedureName;
                 SchemaName = ":";
             }
             else
             {
-                ProcedureName = fullProcedureName.Substring(lastIndexOf + 1);
-                SchemaName = fullProcedureName.Substring(0, lastIndexOf);
+                ProcedureName = fullyQualifiedProcedureName.Substring(lastIndexOf + 1);
+                SchemaName = fullyQualifiedProcedureName.Substring(0, lastIndexOf);
             }
         }
 
-        public KbProcedure(string schemaName, string procedureName)
+        public KbProcedure(string schemaName, string procedureName, KbInsensitiveDictionary<string?>? userParameters = null)
         {
             ProcedureName = schemaName;
             SchemaName = procedureName;
+            UserParameters = userParameters;
         }
     }
 }

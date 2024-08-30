@@ -1,4 +1,6 @@
-﻿namespace NTDLS.Katzebase.Client
+﻿using NTDLS.Katzebase.Client.Types;
+
+namespace NTDLS.Katzebase.Client
 {
     public static class KbExtensions
     {
@@ -22,6 +24,32 @@
             }
 
             return list;
+        }
+
+        public static KbInsensitiveDictionary<string?>? ToUserParameters(this object? userParameters)
+        {
+            KbInsensitiveDictionary<string?>? userParameterValues = null;
+            if (userParameters != null)
+            {
+                userParameterValues = new();
+                var type = userParameters.GetType();
+
+                foreach (var prop in type.GetProperties())
+                {
+                    var rawValue = prop.GetValue(userParameters)?.ToString();
+
+                    if (double.TryParse(rawValue, out _))
+                    {
+                        userParameterValues.Add('@' + prop.Name, rawValue);
+                    }
+                    else
+                    {
+                        userParameterValues.Add('@' + prop.Name, $"'{rawValue}'");
+                    }
+                }
+            }
+
+            return userParameterValues;
         }
     }
 }
