@@ -101,7 +101,7 @@ namespace NTDLS.Katzebase.Client.Management
         public T? FetchFirstOrDefault<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
             => Fetch<T>(statement, queryTimeout).FirstOrDefault();
 
-        public KbQueryQueryExecuteQueriesReply ExecuteMultiple(List<string> statements, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExecuteQueriesReply FetchMultiple(List<string> statements, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
