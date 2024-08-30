@@ -73,7 +73,12 @@ namespace NTDLS.Katzebase.Client
             Connect(hostName, serverPort, userName, password, clientName);
         }
 
-        public static string GetSHA256Hash(string input)
+        /// <summary>
+        /// Returns a SHA256 of the given string.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string HashPassword(string input)
         {
             var hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(input));
 
