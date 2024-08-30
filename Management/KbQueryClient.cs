@@ -91,7 +91,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Explains the condition and join plans, including applicable indexing.
         /// </summary>
         public KbQueryQueryExplainPlansReply ExplainPlans(List<string> statements, object userParameters, TimeSpan? queryTimeout = null)
-            => ExplainPlans(statements, userParameters, queryTimeout);
+            => ExplainPlans(statements, userParameters.ToUserParameters(), queryTimeout);
 
         /// <summary>
         /// Fetches documents using the given query and optional parameters.
