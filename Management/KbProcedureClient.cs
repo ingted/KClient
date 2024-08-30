@@ -43,7 +43,7 @@ namespace NTDLS.Katzebase.Client.Management
                 new KbQueryProcedureExecute(_client.ServerConnectionId, procedure), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
 
-            if (resultCollection.Collection.Count > 0)
+            if (resultCollection.Collection.Count > 1)
             {
                 throw new KbMultipleRecordSetsException();
             }
