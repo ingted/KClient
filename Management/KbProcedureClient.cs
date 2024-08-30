@@ -33,7 +33,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// <summary>
         /// Executes a procedure with or without parameters. This method of calling a procedure performs various types of validation.
         /// </summary>
-        public List<T> Execute<T>(KbProcedure procedure, TimeSpan? queryTimeout = null) where T : new()
+        public IEnumerable<T> Execute<T>(KbProcedure procedure, TimeSpan? queryTimeout = null) where T : new()
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 

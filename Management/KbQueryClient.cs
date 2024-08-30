@@ -67,7 +67,7 @@ namespace NTDLS.Katzebase.Client.Management
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
-        public List<T> Fetch<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
+        public IEnumerable<T> Fetch<T>(string statement, TimeSpan? queryTimeout = null) where T : new()
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 

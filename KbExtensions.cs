@@ -2,7 +2,7 @@
 {
     public static class KbExtensions
     {
-        public static List<T> MapTo<T>(this Payloads.KbQueryDocumentListResult result) where T : new()
+        public static IEnumerable<T> MapTo<T>(this Payloads.KbQueryDocumentListResult result) where T : new()
         {
             var list = new List<T>();
             var properties = KbReflectionCache.GetProperties(typeof(T));
