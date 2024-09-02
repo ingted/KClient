@@ -26,9 +26,9 @@ namespace NTDLS.Katzebase.Client
             return list;
         }
 
-        public static KbInsensitiveDictionary<string?>? ToUserParameters(this object? userParameters)
+        public static KbInsensitiveDictionary<string>? ToUserParameters(this object? userParameters)
         {
-            KbInsensitiveDictionary<string?>? userParameterValues = null;
+            KbInsensitiveDictionary<string>? userParameterValues = null;
             if (userParameters != null)
             {
                 userParameterValues = new();
