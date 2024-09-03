@@ -17,7 +17,22 @@ namespace NTDLS.Katzebase.Client
                     if (properties.TryGetValue(result.Fields[i].Name, out var property) && i < row.Values.Count)
                     {
                         var value = row.Values[i];
-                        property.SetValue(obj, Convert.ChangeType(value, property.PropertyType));
+
+                        if (value == null)
+                        {
+                            if (property.PropertyType.IsValueType && Nullable.GetUnderlyingType(property.PropertyType) == null)
+                            {
+                                continue; // Skip setting value if property is non-nullable value type
+                            }
+                            else
+                            {
+                                property.SetValue(obj, null);
+                            }
+                        }
+                        else
+                        {
+                            property.SetValue(obj, Convert.ChangeType(value, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType));
+                        }
                     }
                 }
                 list.Add(obj);
