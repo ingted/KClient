@@ -22,7 +22,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// <summary>
         /// Explains the condition and join operations.
         /// </summary>
-        public KbQueryQueryExplainOperationReply ExplainOperation(string statement, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExplainOperationReply ExplainOperation(string statement, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -42,7 +42,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// <summary>
         /// Explains the condition and join operations.
         /// </summary>
-        public KbQueryQueryExplainOperationsReply ExplainOperations(List<string> statements, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExplainOperationsReply ExplainOperations(List<string> statements, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -62,7 +62,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// <summary>
         /// Explains the condition and join plans, including applicable indexing.
         /// </summary>
-        public KbQueryQueryExplainPlanReply ExplainPlan(string statement, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExplainPlanReply ExplainPlan(string statement, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -82,7 +82,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// <summary>
         /// Explains the condition and join plans, including applicable indexing.
         /// </summary>
-        public KbQueryQueryExplainPlansReply ExplainPlans(List<string> statements, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExplainPlansReply ExplainPlans(List<string> statements, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -102,7 +102,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// <summary>
         /// Fetches documents using the given query and optional parameters.
         /// </summary>
-        public KbQueryQueryExecuteQueryReply Fetch(string statement, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExecuteQueryReply Fetch(string statement, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -122,7 +122,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// <summary>
         /// Fetches documents using the given query and optional parameters.
         /// </summary>
-        public IEnumerable<T> Fetch<T>(string statement, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null) where T : new()
+        public IEnumerable<T> Fetch<T>(string statement, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null) where T : new()
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -154,7 +154,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// <summary>
         /// Executes multiple statements and fetches their results given the supplied statement and optional parameters.
         /// </summary>
-        public KbQueryQueryExecuteQueriesReply FetchMultiple(List<string> statements, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExecuteQueriesReply FetchMultiple(List<string> statements, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -174,7 +174,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// <summary>
         /// Executes a statements using the supplied statement and optional parameters.
         /// </summary>
-        public KbQueryQueryExecuteNonQueryReply ExecuteNonQuery(string statement, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null)
+        public KbQueryQueryExecuteNonQueryReply ExecuteNonQuery(string statement, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null)
         {
             if (_client.Connection?.IsConnected != true) throw new Exception("The client is not connected.");
 
@@ -216,25 +216,25 @@ namespace NTDLS.Katzebase.Client.Management
         /// <summary>
         /// Fetches a single document using the given query and optional parameters.
         /// </summary>
-        public T FetchSingle<T>(string statement, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null) where T : new()
+        public T FetchSingle<T>(string statement, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null) where T : new()
             => Fetch<T>(statement, userParameters, queryTimeout).Single();
 
         /// <summary>
         /// Fetches a single document. Throws exception if there is more than one match, otherwise return null. Using the given query and optional parameters.
         /// </summary>
-        public T? FetchSingleOrDefault<T>(string statement, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null) where T : new()
+        public T? FetchSingleOrDefault<T>(string statement, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null) where T : new()
             => Fetch<T>(statement, userParameters, queryTimeout).SingleOrDefault();
 
         /// <summary>
         /// Fetches the first document. Throws exception if there are no results. Using the given query and optional parameters.
         /// </summary>
-        public T FetchFirst<T>(string statement, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null) where T : new()
+        public T FetchFirst<T>(string statement, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null) where T : new()
             => Fetch<T>(statement, userParameters, queryTimeout).First();
 
         /// <summary>
         /// Fetches the first document or null if there are no results. Using the given query and optional parameters.
         /// </summary>
-        public T? FetchFirstOrDefault<T>(string statement, Dictionary<string, KbConstant>? userParameters = null, TimeSpan? queryTimeout = null) where T : new()
+        public T? FetchFirstOrDefault<T>(string statement, Dictionary<string, object?>? userParameters = null, TimeSpan? queryTimeout = null) where T : new()
             => Fetch<T>(statement, userParameters, queryTimeout).FirstOrDefault();
     }
 }

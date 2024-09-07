@@ -41,6 +41,12 @@ namespace NTDLS.Katzebase.Client
             return list;
         }
 
+        /// <summary>
+        /// Converts an anonymous class object to a collection of parameters.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static Dictionary<string, KbConstant>? ToUserParametersDictionary(this object? parameters)
         {
             Dictionary<string, KbConstant>? result = null;
@@ -73,39 +79,13 @@ namespace NTDLS.Katzebase.Client
             return result;
         }
 
-        public static KbInsensitiveDictionary<KbConstant>? ToUserParametersInsensitiveDictionary(this object? parameters)
-        {
-            KbInsensitiveDictionary<KbConstant>? result = null;
-            if (parameters != null)
-            {
-                result = new();
-                var type = parameters.GetType();
-
-                foreach (var prop in type.GetProperties())
-                {
-
-                    var rawValue = prop.GetValue(parameters);
-                    if (rawValue is string)
-                    {
-                        result.Add('@' + prop.Name, new KbConstant(rawValue?.ToString(), KbConstants.KbBasicDataType.String));
-                    }
-                    else
-                    {
-                        if (rawValue == null || double.TryParse(rawValue?.ToString(), out _))
-                        {
-                            result.Add('@' + prop.Name, new KbConstant(rawValue?.ToString(), KbConstants.KbBasicDataType.Numeric));
-                        }
-                        else
-                        {
-                            throw new Exception($"Non-string value of [{prop.Name}] cannot be converted to numeric.");
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
-        public static KbInsensitiveDictionary<KbConstant>? ToUserParametersInsensitiveDictionary(this Dictionary<string, KbConstant> parameters)
+        /// <summary>
+        /// Converts an collection of Key-Value-Pairs to a collection of parameters.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static KbInsensitiveDictionary<KbConstant>? ToUserParametersInsensitiveDictionary(this Dictionary<string, object?> parameters)
         {
             if (parameters == null)
             {
@@ -115,7 +95,21 @@ namespace NTDLS.Katzebase.Client
             var result = new KbInsensitiveDictionary<KbConstant>();
             foreach (var parameter in parameters)
             {
-                result.Add(parameter.Key, parameter.Value);
+               if (parameter.Value is string)
+                {
+                    result.Add('@' + parameter.Key, new KbConstant(parameter.Value?.ToString(), KbConstants.KbBasicDataType.String));
+                }
+                else
+                {
+                    if (parameter.Value == null || double.TryParse(parameter.Value?.ToString(), out _))
+                    {
+                        result.Add('@' + parameter.Key, new KbConstant(parameter.Value?.ToString(), KbConstants.KbBasicDataType.Numeric));
+                    }
+                    else
+                    {
+                        throw new Exception($"Non-string value of [{parameter.Key}] cannot be converted to numeric.");
+                    }
+                }
             }
             return result;
         }
