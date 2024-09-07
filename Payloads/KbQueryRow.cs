@@ -16,7 +16,7 @@
 
         public void AddValue(string? value)
         {
-            Values.Add(value ?? string.Empty);
+            Values.Add(value);
         }
     }
 }
