@@ -20,7 +20,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Executes a procedure with or without parameters. This method of calling a procedure performs various types of validation.
         /// </summary>
         public KbQueryProcedureExecuteReply Execute(string fullyQualifiedProcedureName, object? userParameters, TimeSpan? queryTimeout = null)
-            => Execute(fullyQualifiedProcedureName, userParameters.ToUserParameters(), queryTimeout);
+            => Execute(fullyQualifiedProcedureName, userParameters.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Executes a procedure with or without parameters. This method of calling a procedure performs various types of validation.
@@ -31,7 +31,7 @@ namespace NTDLS.Katzebase.Client.Management
 
             queryTimeout ??= _client.Connection.QueryTimeout;
 
-            var procedure = new KbProcedure(fullyQualifiedProcedureName, userParameters?.ToUserParameters());
+            var procedure = new KbProcedure(fullyQualifiedProcedureName, userParameters?.ToUserParametersInsensitiveDictionary());
 
             return _client.Connection.Query(
                 new KbQueryProcedureExecute(_client.ServerConnectionId, procedure), (TimeSpan)queryTimeout)
@@ -42,7 +42,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Executes a procedure with or without parameters. This method of calling a procedure performs various types of validation.
         /// </summary>
         public KbQueryProcedureExecuteReply Execute(string schemaName, string procedureName, object? userParameters, TimeSpan? queryTimeout = null)
-            => Execute(schemaName, procedureName, userParameters.ToUserParameters(), queryTimeout);
+            => Execute(schemaName, procedureName, userParameters.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Executes a procedure with or without parameters. This method of calling a procedure performs various types of validation.
@@ -53,7 +53,7 @@ namespace NTDLS.Katzebase.Client.Management
 
             queryTimeout ??= _client.Connection.QueryTimeout;
 
-            var procedure = new KbProcedure(schemaName, procedureName, userParameters?.ToUserParameters());
+            var procedure = new KbProcedure(schemaName, procedureName, userParameters?.ToUserParametersInsensitiveDictionary());
 
             return _client.Connection.Query(
                 new KbQueryProcedureExecute(_client.ServerConnectionId, procedure), (TimeSpan)queryTimeout)
@@ -64,7 +64,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Executes a procedure with or without parameters. This method of calling a procedure performs various types of validation.
         /// </summary>
         public IEnumerable<T> Execute<T>(string schemaName, string procedureName, object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Execute<T>(schemaName, procedureName, userParameters.ToUserParameters(), queryTimeout);
+            => Execute<T>(schemaName, procedureName, userParameters.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Executes a procedure with or without parameters. This method of calling a procedure performs various types of validation.
@@ -75,7 +75,7 @@ namespace NTDLS.Katzebase.Client.Management
 
             queryTimeout ??= _client.Connection.QueryTimeout;
 
-            var procedure = new KbProcedure(schemaName, procedureName, userParameters?.ToUserParameters());
+            var procedure = new KbProcedure(schemaName, procedureName, userParameters?.ToUserParametersInsensitiveDictionary());
 
             var resultCollection = _client.Connection.Query(
                 new KbQueryProcedureExecute(_client.ServerConnectionId, procedure), (TimeSpan)queryTimeout)
@@ -97,7 +97,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Executes a procedure with or without parameters. This method of calling a procedure performs various types of validation.
         /// </summary>
         IEnumerable<T> Execute<T>(string fullyQualifiedProcedureName, object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Execute<T>(fullyQualifiedProcedureName, userParameters.ToUserParameters(), queryTimeout);
+            => Execute<T>(fullyQualifiedProcedureName, userParameters.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Executes a procedure with or without parameters. This method of calling a procedure performs various types of validation.
@@ -109,7 +109,7 @@ namespace NTDLS.Katzebase.Client.Management
 
             queryTimeout ??= _client.Connection.QueryTimeout;
 
-            var procedure = new KbProcedure(fullyQualifiedProcedureName, userParameters?.ToUserParameters());
+            var procedure = new KbProcedure(fullyQualifiedProcedureName, userParameters?.ToUserParametersInsensitiveDictionary());
 
             var resultCollection = _client.Connection.Query(
                 new KbQueryProcedureExecute(_client.ServerConnectionId, procedure), (TimeSpan)queryTimeout)
@@ -131,37 +131,37 @@ namespace NTDLS.Katzebase.Client.Management
 
         public T ExecuteSingle<T>(string fullyQualifiedProcedureName,
             object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Execute<T>(fullyQualifiedProcedureName, userParameters?.ToUserParameters(), queryTimeout).Single();
+            => Execute<T>(fullyQualifiedProcedureName, userParameters?.ToUserParametersDictionary(), queryTimeout).Single();
 
         public T? ExecuteSingleOrDefault<T>(string fullyQualifiedProcedureName,
             object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Execute<T>(fullyQualifiedProcedureName, userParameters?.ToUserParameters(), queryTimeout).SingleOrDefault();
+            => Execute<T>(fullyQualifiedProcedureName, userParameters?.ToUserParametersDictionary(), queryTimeout).SingleOrDefault();
 
         public T ExecuteFirst<T>(string fullyQualifiedProcedureName,
             object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Execute<T>(fullyQualifiedProcedureName, userParameters?.ToUserParameters(), queryTimeout).First();
+            => Execute<T>(fullyQualifiedProcedureName, userParameters?.ToUserParametersDictionary(), queryTimeout).First();
 
         public T? ExecuteFirstOrDefault<T>(string fullyQualifiedProcedureName,
             object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Execute<T>(fullyQualifiedProcedureName, userParameters?.ToUserParameters(), queryTimeout).FirstOrDefault();
+            => Execute<T>(fullyQualifiedProcedureName, userParameters?.ToUserParametersDictionary(), queryTimeout).FirstOrDefault();
 
         //--Execute single, singleOrDefault, first, firstOrDefault by specific schema and procedure name using anonymous parameter type.
 
         public T ExecuteSingle<T>(string schemaName, string procedureName,
             object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Execute<T>(schemaName, procedureName, userParameters.ToUserParameters(), queryTimeout).Single();
+            => Execute<T>(schemaName, procedureName, userParameters.ToUserParametersDictionary(), queryTimeout).Single();
 
         public T? ExecuteSingleOrDefault<T>(string schemaName, string procedureName,
             object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Execute<T>(schemaName, procedureName, userParameters.ToUserParameters(), queryTimeout).SingleOrDefault();
+            => Execute<T>(schemaName, procedureName, userParameters.ToUserParametersDictionary(), queryTimeout).SingleOrDefault();
 
         public T ExecuteFirst<T>(string schemaName, string procedureName,
             object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Execute<T>(schemaName, procedureName, userParameters.ToUserParameters(), queryTimeout).First();
+            => Execute<T>(schemaName, procedureName, userParameters.ToUserParametersDictionary(), queryTimeout).First();
 
         public T? ExecuteFirstOrDefault<T>(string schemaName, string procedureName,
             object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Execute<T>(schemaName, procedureName, userParameters.ToUserParameters(), queryTimeout).FirstOrDefault();
+            => Execute<T>(schemaName, procedureName, userParameters.ToUserParametersDictionary(), queryTimeout).FirstOrDefault();
 
         //--Execute single, singleOrDefault, first, firstOrDefault by fully qualified procedure name using parameter collection.
 

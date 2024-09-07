@@ -16,7 +16,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Explains the condition and join operations.
         /// </summary>
         public KbQueryQueryExplainOperationReply ExplainOperation(string statement, object? userParameters, TimeSpan? queryTimeout = null)
-            => ExplainOperation(statement, userParameters?.ToUserParameters(), queryTimeout);
+            => ExplainOperation(statement, userParameters?.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Explains the condition and join operations.
@@ -28,7 +28,7 @@ namespace NTDLS.Katzebase.Client.Management
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExplainOperation(_client.ServerConnectionId, statement, userParameters?.ToUserParameters()), (TimeSpan)queryTimeout)
+                new KbQueryQueryExplainOperation(_client.ServerConnectionId, statement, userParameters?.ToUserParametersInsensitiveDictionary()), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
@@ -36,7 +36,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Explains the condition and join operations.
         /// </summary>
         public KbQueryQueryExplainOperationsReply ExplainOperations(List<string> statements, object? userParameters, TimeSpan? queryTimeout = null)
-            => ExplainOperations(statements, userParameters?.ToUserParameters(), queryTimeout);
+            => ExplainOperations(statements, userParameters?.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Explains the condition and join operations.
@@ -48,7 +48,7 @@ namespace NTDLS.Katzebase.Client.Management
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExplainOperations(_client.ServerConnectionId, statements, userParameters?.ToUserParameters()), (TimeSpan)queryTimeout)
+                new KbQueryQueryExplainOperations(_client.ServerConnectionId, statements, userParameters?.ToUserParametersInsensitiveDictionary()), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
@@ -56,7 +56,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Explains the condition and join plans, including applicable indexing.
         /// </summary>
         public KbQueryQueryExplainPlanReply ExplainPlan(string statement, object? userParameters, TimeSpan? queryTimeout = null)
-            => ExplainPlan(statement, userParameters?.ToUserParameters(), queryTimeout);
+            => ExplainPlan(statement, userParameters?.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Explains the condition and join plans, including applicable indexing.
@@ -68,7 +68,7 @@ namespace NTDLS.Katzebase.Client.Management
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExplainPlan(_client.ServerConnectionId, statement, userParameters?.ToUserParameters()), (TimeSpan)queryTimeout)
+                new KbQueryQueryExplainPlan(_client.ServerConnectionId, statement, userParameters?.ToUserParametersInsensitiveDictionary()), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
@@ -76,7 +76,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Explains the condition and join plans, including applicable indexing.
         /// </summary>
         public KbQueryQueryExplainPlansReply ExplainPlans(List<string> statements, object? userParameters, TimeSpan? queryTimeout = null)
-            => ExplainPlans(statements, userParameters?.ToUserParameters(), queryTimeout);
+            => ExplainPlans(statements, userParameters?.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Explains the condition and join plans, including applicable indexing.
@@ -88,7 +88,7 @@ namespace NTDLS.Katzebase.Client.Management
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExplainPlans(_client.ServerConnectionId, statements, userParameters?.ToUserParameters()), (TimeSpan)queryTimeout)
+                new KbQueryQueryExplainPlans(_client.ServerConnectionId, statements, userParameters?.ToUserParametersInsensitiveDictionary()), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
@@ -96,7 +96,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Fetches documents using the given query and optional parameters.
         /// </summary>
         public KbQueryQueryExecuteQueryReply Fetch(string statement, object? userParameters, TimeSpan? queryTimeout = null)
-            => Fetch(statement, userParameters?.ToUserParameters(), queryTimeout);
+            => Fetch(statement, userParameters?.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Fetches documents using the given query and optional parameters.
@@ -108,7 +108,7 @@ namespace NTDLS.Katzebase.Client.Management
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExecuteQuery(_client.ServerConnectionId, statement, userParameters?.ToUserParameters()), (TimeSpan)queryTimeout)
+                new KbQueryQueryExecuteQuery(_client.ServerConnectionId, statement, userParameters?.ToUserParametersInsensitiveDictionary()), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
@@ -116,7 +116,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Fetches documents using the given query and optional parameters.
         /// </summary>
         public IEnumerable<T> Fetch<T>(string statement, object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Fetch<T>(statement, userParameters?.ToUserParameters(), queryTimeout);
+            => Fetch<T>(statement, userParameters?.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Fetches documents using the given query and optional parameters.
@@ -128,7 +128,7 @@ namespace NTDLS.Katzebase.Client.Management
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             var resultCollection = _client.Connection.Query(
-                new KbQueryQueryExecuteQuery(_client.ServerConnectionId, statement, userParameters?.ToUserParameters()), (TimeSpan)queryTimeout)
+                new KbQueryQueryExecuteQuery(_client.ServerConnectionId, statement, userParameters?.ToUserParametersInsensitiveDictionary()), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
 
             if (resultCollection.Collection.Count > 1)
@@ -148,7 +148,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Executes multiple statements and fetches their results given the supplied statement and optional parameters.
         /// </summary>
         public KbQueryQueryExecuteQueriesReply FetchMultiple(List<string> statements, object? userParameters, TimeSpan? queryTimeout = null)
-            => FetchMultiple(statements, userParameters?.ToUserParameters(), queryTimeout);
+            => FetchMultiple(statements, userParameters?.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Executes multiple statements and fetches their results given the supplied statement and optional parameters.
@@ -160,7 +160,7 @@ namespace NTDLS.Katzebase.Client.Management
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExecuteQueries(_client.ServerConnectionId, statements, userParameters?.ToUserParameters()), (TimeSpan)queryTimeout)
+                new KbQueryQueryExecuteQueries(_client.ServerConnectionId, statements, userParameters?.ToUserParametersInsensitiveDictionary()), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
@@ -168,7 +168,7 @@ namespace NTDLS.Katzebase.Client.Management
         /// Executes a statements using the supplied statement and optional parameters.
         /// </summary>
         public KbQueryQueryExecuteNonQueryReply ExecuteNonQuery(string statement, object? userParameters, TimeSpan? queryTimeout = null)
-            => ExecuteNonQuery(statement, userParameters?.ToUserParameters(), queryTimeout);
+            => ExecuteNonQuery(statement, userParameters?.ToUserParametersDictionary(), queryTimeout);
 
         /// <summary>
         /// Executes a statements using the supplied statement and optional parameters.
@@ -180,7 +180,7 @@ namespace NTDLS.Katzebase.Client.Management
             queryTimeout ??= _client.Connection.QueryTimeout;
 
             return _client.Connection.Query(
-                new KbQueryQueryExecuteNonQuery(_client.ServerConnectionId, statement, userParameters?.ToUserParameters()), (TimeSpan)queryTimeout)
+                new KbQueryQueryExecuteNonQuery(_client.ServerConnectionId, statement, userParameters?.ToUserParametersInsensitiveDictionary()), (TimeSpan)queryTimeout)
                 .ContinueWith(t => _client.ValidateTaskResult(t)).Result;
         }
 
@@ -190,25 +190,25 @@ namespace NTDLS.Katzebase.Client.Management
         /// Fetches a single document using the given query and optional parameters.
         /// </summary>
         public T FetchSingle<T>(string statement, object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Fetch<T>(statement, userParameters?.ToUserParameters(), queryTimeout).Single();
+            => Fetch<T>(statement, userParameters?.ToUserParametersDictionary(), queryTimeout).Single();
 
         /// <summary>
         /// Fetches a single document. Throws exception if there is more than one match, otherwise return null. Using the given query and optional parameters.
         /// </summary>
         public T? FetchSingleOrDefault<T>(string statement, object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Fetch<T>(statement, userParameters?.ToUserParameters(), queryTimeout).SingleOrDefault();
+            => Fetch<T>(statement, userParameters?.ToUserParametersDictionary(), queryTimeout).SingleOrDefault();
 
         /// <summary>
         /// Fetches the first document. Throws exception if there are no results. Using the given query and optional parameters.
         /// </summary>
         public T FetchFirst<T>(string statement, object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Fetch<T>(statement, userParameters?.ToUserParameters(), queryTimeout).First();
+            => Fetch<T>(statement, userParameters?.ToUserParametersDictionary(), queryTimeout).First();
 
         /// <summary>
         /// Fetches the first document or null if there are no results. Using the given query and optional parameters.
         /// </summary>
         public T? FetchFirstOrDefault<T>(string statement, object? userParameters, TimeSpan? queryTimeout = null) where T : new()
-            => Fetch<T>(statement, userParameters?.ToUserParameters(), queryTimeout).FirstOrDefault();
+            => Fetch<T>(statement, userParameters?.ToUserParametersDictionary(), queryTimeout).FirstOrDefault();
 
         //--Fetch single, singleOrDefault, first, firstOrDefault using parameter collection.
 

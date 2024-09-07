@@ -41,7 +41,7 @@ namespace NTDLS.Katzebase.Client
             return list;
         }
 
-        public static Dictionary<string, string?>? ToUserParameters(this object? value)
+        public static Dictionary<string, string?>? ToUserParametersDictionary(this object? value)
         {
             Dictionary<string, string?>? userParameterValues = null;
             if (value != null)
@@ -67,7 +67,7 @@ namespace NTDLS.Katzebase.Client
             return userParameterValues;
         }
 
-        public static KbInsensitiveDictionary<string?>? ToUserParameters(this Dictionary<string, string?> value)
+        public static KbInsensitiveDictionary<string?>? ToUserParametersInsensitiveDictionary(this object? value)
         {
             KbInsensitiveDictionary<string?>? userParameterValues = null;
             if (value != null)
@@ -90,6 +90,21 @@ namespace NTDLS.Katzebase.Client
                 }
             }
 
+            return userParameterValues;
+        }
+
+        public static KbInsensitiveDictionary<string?>? ToUserParametersInsensitiveDictionary(this Dictionary<string, string?> value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            var userParameterValues = new KbInsensitiveDictionary<string?>();
+            foreach (var val in value)
+            {
+                userParameterValues.Add(val.Key, val.Value);
+            }
             return userParameterValues;
         }
     }
