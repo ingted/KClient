@@ -41,17 +41,43 @@ namespace NTDLS.Katzebase.Client
             return list;
         }
 
-        public static KbInsensitiveDictionary<string>? ToUserParameters(this object? userParameters)
+        public static Dictionary<string, string?>? ToUserParameters(this object? value)
         {
-            KbInsensitiveDictionary<string>? userParameterValues = null;
-            if (userParameters != null)
+            Dictionary<string, string?>? userParameterValues = null;
+            if (value != null)
             {
                 userParameterValues = new();
-                var type = userParameters.GetType();
+                var type = value.GetType();
 
                 foreach (var prop in type.GetProperties())
                 {
-                    var rawValue = prop.GetValue(userParameters)?.ToString();
+                    var rawValue = prop.GetValue(value)?.ToString();
+
+                    if (double.TryParse(rawValue, out _))
+                    {
+                        userParameterValues.Add('@' + prop.Name, rawValue);
+                    }
+                    else
+                    {
+                        userParameterValues.Add('@' + prop.Name, $"'{rawValue}'");
+                    }
+                }
+            }
+
+            return userParameterValues;
+        }
+
+        public static KbInsensitiveDictionary<string?>? ToUserParameters(this Dictionary<string, string?> value)
+        {
+            KbInsensitiveDictionary<string?>? userParameterValues = null;
+            if (value != null)
+            {
+                userParameterValues = new();
+                var type = value.GetType();
+
+                foreach (var prop in type.GetProperties())
+                {
+                    var rawValue = prop.GetValue(value)?.ToString();
 
                     if (double.TryParse(rawValue, out _))
                     {

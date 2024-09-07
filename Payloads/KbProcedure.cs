@@ -4,7 +4,7 @@ namespace NTDLS.Katzebase.Client.Payloads
 {
     public class KbProcedure
     {
-        public KbInsensitiveDictionary<string>? UserParameters { get; set; } = null;
+        public KbInsensitiveDictionary<string?>? UserParameters { get; set; } = null;
 
         public string ProcedureName { get; set; }
         public string SchemaName { get; set; }
@@ -15,7 +15,7 @@ namespace NTDLS.Katzebase.Client.Payloads
             SchemaName = string.Empty;
         }
 
-        public KbProcedure(string fullyQualifiedProcedureName, KbInsensitiveDictionary<string>? userParameters = null)
+        public KbProcedure(string fullyQualifiedProcedureName, KbInsensitiveDictionary<string?>? userParameters = null)
         {
             UserParameters = userParameters;
 
@@ -33,7 +33,7 @@ namespace NTDLS.Katzebase.Client.Payloads
             }
         }
 
-        public KbProcedure(string schemaName, string procedureName, KbInsensitiveDictionary<string>? userParameters = null)
+        public KbProcedure(string schemaName, string procedureName, KbInsensitiveDictionary<string?>? userParameters = null)
         {
             ProcedureName = schemaName;
             SchemaName = procedureName;
