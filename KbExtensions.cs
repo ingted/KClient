@@ -41,9 +41,9 @@ namespace NTDLS.Katzebase.Client
             return list;
         }
 
-        public static Dictionary<string, string?>? ToUserParametersDictionary(this object? value)
+        public static Dictionary<string, KbConstant>? ToUserParametersDictionary(this object? value)
         {
-            Dictionary<string, string?>? userParameterValues = null;
+            Dictionary<string, KbConstant>? userParameterValues = null;
             if (value != null)
             {
                 userParameterValues = new();
@@ -51,15 +51,21 @@ namespace NTDLS.Katzebase.Client
 
                 foreach (var prop in type.GetProperties())
                 {
-                    var rawValue = prop.GetValue(value)?.ToString();
-
-                    if (double.TryParse(rawValue, out _))
+                    var rawValue = prop.GetValue(value);
+                    if (rawValue is string)
                     {
-                        userParameterValues.Add('@' + prop.Name, rawValue);
+                        userParameterValues.Add('@' + prop.Name, new KbConstant(rawValue?.ToString(), KbConstants.KbBasicDataType.String));
                     }
                     else
                     {
-                        userParameterValues.Add('@' + prop.Name, $"'{rawValue}'");
+                        if (rawValue == null || double.TryParse(rawValue?.ToString(), out _))
+                        {
+                            userParameterValues.Add('@' + prop.Name, new KbConstant(rawValue?.ToString(), KbConstants.KbBasicDataType.Numeric));
+                        }
+                        else
+                        {
+                            throw new Exception($"Non-string value of [{prop.Name}] cannot be converted to numeric.");
+                        }
                     }
                 }
             }
@@ -67,9 +73,9 @@ namespace NTDLS.Katzebase.Client
             return userParameterValues;
         }
 
-        public static KbInsensitiveDictionary<string?>? ToUserParametersInsensitiveDictionary(this object? value)
+        public static KbInsensitiveDictionary<KbConstant>? ToUserParametersInsensitiveDictionary(this object? value)
         {
-            KbInsensitiveDictionary<string?>? userParameterValues = null;
+            KbInsensitiveDictionary<KbConstant>? userParameterValues = null;
             if (value != null)
             {
                 userParameterValues = new();
@@ -77,33 +83,54 @@ namespace NTDLS.Katzebase.Client
 
                 foreach (var prop in type.GetProperties())
                 {
-                    var rawValue = prop.GetValue(value)?.ToString();
 
-                    if (double.TryParse(rawValue, out _))
+                    var rawValue = prop.GetValue(value);
+                    if (rawValue is string)
                     {
-                        userParameterValues.Add('@' + prop.Name, rawValue);
+                        userParameterValues.Add('@' + prop.Name, new KbConstant(rawValue?.ToString(), KbConstants.KbBasicDataType.String));
                     }
                     else
                     {
-                        userParameterValues.Add('@' + prop.Name, $"'{rawValue}'");
+                        if (rawValue == null || double.TryParse(rawValue?.ToString(), out _))
+                        {
+                            userParameterValues.Add('@' + prop.Name, new KbConstant(rawValue?.ToString(), KbConstants.KbBasicDataType.Numeric));
+                        }
+                        else
+                        {
+                            throw new Exception($"Non-string value of [{prop.Name}] cannot be converted to numeric.");
+                        }
                     }
                 }
             }
-
             return userParameterValues;
         }
 
-        public static KbInsensitiveDictionary<string?>? ToUserParametersInsensitiveDictionary(this Dictionary<string, string?> value)
+        public static KbInsensitiveDictionary<KbConstant>? ToUserParametersInsensitiveDictionary(this Dictionary<string, object?> parameters)
         {
-            if (value == null)
+            if (parameters == null)
             {
                 return null;
             }
 
-            var userParameterValues = new KbInsensitiveDictionary<string?>();
-            foreach (var val in value)
+            var userParameterValues = new KbInsensitiveDictionary<KbConstant>();
+            foreach (var parameter in parameters)
             {
-                userParameterValues.Add(val.Key, val.Value);
+                var rawValue = parameter.Value;
+                if (rawValue is string)
+                {
+                    userParameterValues.Add('@' + parameter.Key, new KbConstant(rawValue?.ToString(), KbConstants.KbBasicDataType.String));
+                }
+                else
+                {
+                    if (rawValue == null || double.TryParse(rawValue?.ToString(), out _))
+                    {
+                        userParameterValues.Add('@' + parameter.Key, new KbConstant(rawValue?.ToString(), KbConstants.KbBasicDataType.Numeric));
+                    }
+                    else
+                    {
+                        throw new Exception($"Non-string value of [{parameter.Key}] cannot be converted to numeric.");
+                    }
+                }
             }
             return userParameterValues;
         }
