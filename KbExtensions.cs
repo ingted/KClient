@@ -80,6 +80,44 @@ namespace NTDLS.Katzebase.Client
         }
 
         /// <summary>
+        /// Converts an anonymous class object to a collection of parameters.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static KbInsensitiveDictionary<KbConstant>? ToUserParametersInsensitiveDictionary(this object? parameters)
+        {
+            KbInsensitiveDictionary<KbConstant>? result = null;
+            if (parameters != null)
+            {
+                result = new();
+                var type = parameters.GetType();
+
+                foreach (var prop in type.GetProperties())
+                {
+                    var rawValue = prop.GetValue(parameters);
+                    if (rawValue is string)
+                    {
+                        result.Add('@' + prop.Name, new KbConstant(rawValue?.ToString(), KbConstants.KbBasicDataType.String));
+                    }
+                    else
+                    {
+                        if (rawValue == null || double.TryParse(rawValue?.ToString(), out _))
+                        {
+                            result.Add('@' + prop.Name, new KbConstant(rawValue?.ToString(), KbConstants.KbBasicDataType.Numeric));
+                        }
+                        else
+                        {
+                            throw new Exception($"Non-string value of [{prop.Name}] cannot be converted to numeric.");
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Converts an collection of Key-Value-Pairs to a collection of parameters.
         /// </summary>
         /// <param name="parameters"></param>
@@ -95,7 +133,7 @@ namespace NTDLS.Katzebase.Client
             var result = new KbInsensitiveDictionary<KbConstant>();
             foreach (var parameter in parameters)
             {
-               if (parameter.Value is string)
+                if (parameter.Value is string)
                 {
                     result.Add('@' + parameter.Key, new KbConstant(parameter.Value?.ToString(), KbConstants.KbBasicDataType.String));
                 }
