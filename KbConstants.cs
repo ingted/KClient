@@ -38,6 +38,13 @@
             Fatal = 5
         }
 
+        public enum KbBasicDataType
+        {
+            Undefined,
+            String,
+            Numeric
+        }
+
         public enum KbTransactionWarning
         {
             ResultDisqualifiedByNullValue,
