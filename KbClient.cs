@@ -37,6 +37,8 @@ namespace NTDLS.Katzebase.Client
 
         internal RmClient? Connection { get; private set; }
 
+        public bool IsConnected => Connection?.IsConnected == true;
+
         public string Host { get; private set; } = string.Empty;
         public int Port { get; private set; }
         public ulong ProcessId { get; private set; }
